@@ -1,0 +1,25 @@
+{
+    "header": {
+      "title": "HelpNow",
+      "needHelp": "मुझे मदद चाहिए (संसाधन)",
+      "wantToHelp": "मैं मदद करना चाहता हूं (स्वयंसेवा और दान स्थान)"
+    },
+    "needhelp": {
+      "need_help": "मुझे मदद चाहिए",
+      "this_search_draws": "यह खोज इससे डेटा प्राप्त करती है",
+      "MALAN_resources_table": "MALAN संसाधन तालिका",
+      "zip_code": "पिन कोड",
+      "choose_category": "श्रेणी चुनें",
+      "search": "खोजें",
+      "no_results": "कोई परिणाम नहीं मिला",
+      "no_resources_found": "इस श्रेणी और क्षेत्र के लिए कोई संसाधन नहीं मिला।",
+      "help_category": "सहायता श्रेणी",
+      "Back": "वापस",
+      "want_to_talk_with_Lala": "क्या आप लाला से बात करना चाहते हैं कि क्या हो रहा है?",
+      "click_here": "यहां क्लिक करें!"
+    },
+    "chatbot": {
+      "get_and_give_help": "कैलिफोर्निया जंगल की आग के दौरान मदद लें और मदद करें"
+    }
+  }
+  

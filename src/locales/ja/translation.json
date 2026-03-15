@@ -1,0 +1,25 @@
+{
+    "header": {
+      "title": "HelpNow",
+      "needHelp": "助けが必要です（リソース）",
+      "wantToHelp": "助けたい（ボランティアと寄付場所）"
+    },
+    "needhelp": {
+      "need_help": "助けが必要です",
+      "this_search_draws": "この検索は以下から取得します",
+      "MALAN_resources_table": "MALANリソーステーブル",
+      "zip_code": "郵便番号",
+      "choose_category": "カテゴリーを選択",
+      "search": "検索",
+      "no_results": "結果がありません",
+      "no_resources_found": "このカテゴリと地域に該当するリソースが見つかりませんでした。",
+      "help_category": "支援カテゴリ",
+      "Back": "戻る",
+      "want_to_talk_with_Lala": "何が起こっているのかララと話したいですか？",
+      "click_here": "ここをクリック！"
+    },
+    "chatbot": {
+      "get_and_give_help": "カリフォルニア州の山火事中に助けを受け、助けを提供する"
+    }
+  }
+  

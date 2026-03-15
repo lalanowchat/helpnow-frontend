@@ -1,0 +1,25 @@
+{
+    "header": {
+      "title": "HelpNow",
+      "needHelp": "أحتاج إلى مساعدة (موارد)",
+      "wantToHelp": "أريد المساعدة (أماكن التطوع والتبرعات)"
+    },
+    "needhelp": {
+      "need_help": "أحتاج إلى مساعدة",
+      "this_search_draws": "يستند هذا البحث إلى",
+      "MALAN_resources_table": "جدول موارد MALAN",
+      "zip_code": "الرمز البريدي",
+      "choose_category": "اختر الفئة",
+      "search": "بحث",
+      "no_results": "لا توجد نتائج",
+      "no_resources_found": "لم يتم العثور على موارد لهذه الفئة والمنطقة.",
+      "help_category": "فئة المساعدة",
+      "Back": "عودة",
+      "want_to_talk_with_Lala": "هل تريد التحدث مع لالا عما يحدث؟",
+      "click_here": "اضغط هنا!"
+    },
+    "chatbot": {
+      "get_and_give_help": "احصل على المساعدة وقدمها خلال حرائق الغابات في كاليفورنيا"
+    }
+  }
+  

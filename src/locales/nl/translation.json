@@ -1,0 +1,25 @@
+{
+    "header": {
+      "title": "HelpNow",
+      "needHelp": "Ik heb hulp nodig (middelen)",
+      "wantToHelp": "Ik wil helpen (vrijwilligerswerk en donatielocaties)"
+    },
+    "needhelp": {
+      "need_help": "Ik Heb Hulp Nodig",
+      "this_search_draws": "Deze zoekopdracht haalt gegevens uit",
+      "MALAN_resources_table": "MALAN hulpmiddelentabel",
+      "zip_code": "Postcode",
+      "choose_category": "Kies een categorie",
+      "search": "Zoeken",
+      "no_results": "Geen resultaten",
+      "no_resources_found": "Geen bronnen gevonden voor deze categorie en regio.",
+      "help_category": "Hulp Categorie",
+      "Back": "Terug",
+      "want_to_talk_with_Lala": "Wil je met Lala praten over wat er gebeurt?",
+      "click_here": "Klik hier!"
+    },
+    "chatbot": {
+      "get_and_give_help": "Krijg en geef hulp tijdens bosbranden in Californië"
+    }
+  }
+  

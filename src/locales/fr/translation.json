@@ -1,0 +1,25 @@
+{
+    "header": {
+      "title": "HelpNow",
+      "needHelp": "J'ai besoin d'aide (ressources)",
+      "wantToHelp": "Je veux aider (bénévolat et lieux de dons)"
+    },
+    "needhelp": {
+      "need_help": "J'ai Besoin d'Aide",
+      "this_search_draws": "Cette recherche se base sur",
+      "MALAN_resources_table": "Table des ressources MALAN",
+      "zip_code": "Code Postal",
+      "choose_category": "Choisissez une catégorie",
+      "search": "Rechercher",
+      "no_results": "Aucun résultat",
+      "no_resources_found": "Aucune ressource trouvée pour cette catégorie et cette zone.",
+      "help_category": "Catégorie d'aide",
+      "Back": "Retour",
+      "want_to_talk_with_Lala": "Vous voulez parler avec Lala de ce qui se passe ?",
+      "click_here": "Cliquez ici !"
+    },
+    "chatbot": {
+      "get_and_give_help": "Obtenez et offrez de l'aide pendant les incendies de forêt en Californie"
+    }
+  }
+  

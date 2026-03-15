@@ -1,0 +1,24 @@
+{
+    "header": {
+      "title": "HelpNow",
+      "needHelp": "I need help (resources)",
+      "wantToHelp": "I want to help (volunteering & donation locations)"
+    },
+    "needhelp": {
+      "need_help": "I Need Help",
+      "this_search_draws": "This search draws from",
+      "MALAN_resources_table": "MALAN_resources_table",
+      "zip_code": "Zip Code",
+      "choose_category": "Choose Category",
+      "search": "Search",
+      "no_results": "No Results",
+      "no_resources_found": "No resources found for this category and area.",
+      "help_category": "Help Category",
+      "Back": "Back",
+      "want_to_talk_with_Lala": "Want to talk with Lala about what's going on?",
+      "click_here": "Click here!"
+    },
+    "chatbot": {
+      "get_and_give_help": "Get and give help during California Wildfires"
+    }
+  }

@@ -1,0 +1,25 @@
+{
+    "header": {
+      "title": "HelpNow",
+      "needHelp": "我需要帮助（资源）",
+      "wantToHelp": "我想提供帮助（志愿服务和捐赠地点）"
+    },
+    "needhelp": {
+      "need_help": "我需要帮助",
+      "this_search_draws": "此搜索来源于",
+      "MALAN_resources_table": "MALAN资源表",
+      "zip_code": "邮政编码",
+      "choose_category": "选择类别",
+      "search": "搜索",
+      "no_results": "没有结果",
+      "no_resources_found": "此类别和地区没有找到相关资源。",
+      "help_category": "帮助类别",
+      "Back": "返回",
+      "want_to_talk_with_Lala": "想和Lala聊聊发生了什么吗？",
+      "click_here": "点击这里！"
+    },
+    "chatbot": {
+      "get_and_give_help": "在加州野火期间获得和提供帮助"
+    }
+  }
+  

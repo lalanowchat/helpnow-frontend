@@ -1,0 +1,8 @@
+
+  /* Change the assistant (bot) avatar */
+  .vfrc-avatar {
+    content: "";
+    background-image: url("/bot_logo.png?v=2") !important; /* Bot avatar */
+    background-size: contain;
+  }
+  
