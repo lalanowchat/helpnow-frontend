@@ -30,9 +30,8 @@ const MapComponent = ({ resources }) => {
       mapRef.current.off();
       mapRef.current.remove();
     } 
-
-    // Initialize the map centered on Los Angeles
-    mapRef.current = L.map('map').setView([34.0522, -118.2437], 11);
+    // Initialize the map centered on Sedona
+    mapRef.current = L.map('map').setView([34.857169083978626, -111.76940984502275], 11);
 
     // Add a tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
