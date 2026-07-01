@@ -15,10 +15,13 @@ import MapComponent from "@/components/MapComponent";
 import { ArrowLeft } from "lucide-react";
 import { translateText } from "../translateText"; // Import translation function
 
+// Pocket Fire / Flagstaff–Sedona default search area
+const DEFAULT_ZIP = "86001";
+
 export default function NeedHelp() {
   const [categories, setCategories] = useState([]);
   const [translatedCategories, setTranslatedCategories] = useState([]);
-  const [zipCode, setZipCode] = useState("");
+  const [zipCode, setZipCode] = useState(DEFAULT_ZIP);
   const [chosenCategory, setChosenCategory] = useState("");
   const [resources, setResources] = useState([]);
   const { t, i18n } = useTranslation();
@@ -81,7 +84,7 @@ export default function NeedHelp() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       category: "",
-      zipCode: "",
+      zipCode: DEFAULT_ZIP,
     },
   });
 

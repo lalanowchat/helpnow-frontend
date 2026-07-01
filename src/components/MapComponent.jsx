@@ -18,6 +18,10 @@ L.Icon.Default.mergeOptions({
 // Without this, the default blue markers will appear as broken images.
 delete L.Icon.Default.prototype._getIconUrl;
 
+// Flagstaff / Sedona area — matches Need Help default ZIP (86001)
+const DEFAULT_MAP_CENTER = [35.0, -111.7];
+const DEFAULT_MAP_ZOOM = 10;
+
 const MapComponent = ({ resources }) => {
   const mapRef = useRef(null);                // Map Reference object
   const markersLayerGroupRef = useRef(null);  // Markers Layer Reference object
@@ -30,8 +34,8 @@ const MapComponent = ({ resources }) => {
       mapRef.current.off();
       mapRef.current.remove();
     } 
-    // Initialize the map centered on Sedona
-    mapRef.current = L.map('map').setView([34.857169083978626, -111.76940984502275], 11);
+    // Initial view covers Flagstaff and Sedona before markers load
+    mapRef.current = L.map('map').setView(DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM);
 
     // Add a tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
