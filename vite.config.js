@@ -12,11 +12,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/data": {
-        target: "https://lalanow-backend-v3.fly.dev/data", 
+        target: "http://127.0.0.1:8000/api/v1/data",
         changeOrigin: true,
       },
       "/resources": {
-        target: "https://lalanow-backend-v3.fly.dev/resources/all", 
+        target: "http://127.0.0.1:8000/api/v1",
         changeOrigin: true,
       },
       "/translate": {
