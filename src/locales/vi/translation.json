@@ -1,25 +1,36 @@
 {
-    "header": {
-      "title": "HelpNow",
-      "needHelp": "Tôi cần giúp đỡ (nguồn tài nguyên)",
-      "wantToHelp": "Tôi muốn giúp đỡ (địa điểm tình nguyện và quyên góp)"
-    },
-    "needhelp": {
-      "need_help": "Tôi Cần Giúp Đỡ",
-      "this_search_draws": "Tìm kiếm này được lấy từ",
-      "MALAN_resources_table": "Bảng tài nguyên MALAN",
-      "zip_code": "Mã Bưu Chính",
-      "choose_category": "Chọn Danh Mục",
-      "search": "Tìm kiếm",
-      "no_results": "Không có kết quả",
-      "no_resources_found": "Không tìm thấy tài nguyên cho danh mục và khu vực này.",
-      "help_category": "Danh mục trợ giúp",
-      "Back": "Quay lại",
-      "want_to_talk_with_Lala": "Bạn muốn nói chuyện với Lala về những gì đang xảy ra?",
-      "click_here": "Nhấn vào đây!"
-    },
-    "chatbot": {
-      "get_and_give_help": "Nhận và cung cấp trợ giúp trong thời gian cháy rừng tại California"
-    }
+  "header": {
+    "title": "HelpNow",
+    "needHelp": "Tôi cần giúp đỡ (nguồn tài nguyên)",
+    "wantToHelp": "Tôi muốn giúp đỡ (địa điểm tình nguyện và quyên góp)"
+  },
+  "needhelp": {
+    "need_help": "Tôi Cần Giúp Đỡ",
+    "this_search_draws": "Tìm kiếm này được lấy từ",
+    "MALAN_resources_table": "Bảng tài nguyên MALAN",
+    "zip_code": "Mã Bưu Chính",
+    "choose_category": "Chọn Danh Mục",
+    "search": "Tìm kiếm",
+    "no_results": "Không có kết quả",
+    "no_resources_found": "Không tìm thấy tài nguyên cho danh mục và khu vực này.",
+    "help_category": "Danh mục trợ giúp",
+    "Back": "Quay lại",
+    "want_to_talk_with_Lala": "Bạn muốn nói chuyện với Lala về những gì đang xảy ra?",
+    "click_here": "Nhấn vào đây!",
+    "phone": "Điện thoại",
+    "website": "Trang web",
+    "hours": "Giờ mở cửa",
+    "providing": "Cung cấp",
+    "call_phone": "Gọi",
+    "visit_website": "Truy cập trang web",
+    "miles": "dặm",
+    "distance": "Khoảng cách",
+    "load_more": "Tải thêm kết quả",
+    "providing_unknown": "Chưa rõ dịch vụ",
+    "unknown_name": "Tên không rõ",
+    "unknown_address": "Địa chỉ không rõ"
+  },
+  "chatbot": {
+    "get_and_give_help": "Nhận và cung cấp trợ giúp trong thời gian cháy rừng tại California"
   }
-  
+}

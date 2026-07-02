@@ -1,25 +1,36 @@
 {
-    "header": {
-      "title": "HelpNow",
-      "needHelp": "أحتاج إلى مساعدة (موارد)",
-      "wantToHelp": "أريد المساعدة (أماكن التطوع والتبرعات)"
-    },
-    "needhelp": {
-      "need_help": "أحتاج إلى مساعدة",
-      "this_search_draws": "يستند هذا البحث إلى",
-      "MALAN_resources_table": "جدول موارد MALAN",
-      "zip_code": "الرمز البريدي",
-      "choose_category": "اختر الفئة",
-      "search": "بحث",
-      "no_results": "لا توجد نتائج",
-      "no_resources_found": "لم يتم العثور على موارد لهذه الفئة والمنطقة.",
-      "help_category": "فئة المساعدة",
-      "Back": "عودة",
-      "want_to_talk_with_Lala": "هل تريد التحدث مع لالا عما يحدث؟",
-      "click_here": "اضغط هنا!"
-    },
-    "chatbot": {
-      "get_and_give_help": "احصل على المساعدة وقدمها خلال حرائق الغابات في كاليفورنيا"
-    }
+  "header": {
+    "title": "HelpNow",
+    "needHelp": "أحتاج إلى مساعدة (موارد)",
+    "wantToHelp": "أريد المساعدة (أماكن التطوع والتبرعات)"
+  },
+  "needhelp": {
+    "need_help": "أحتاج إلى مساعدة",
+    "this_search_draws": "يستند هذا البحث إلى",
+    "MALAN_resources_table": "جدول موارد MALAN",
+    "zip_code": "الرمز البريدي",
+    "choose_category": "اختر الفئة",
+    "search": "بحث",
+    "no_results": "لا توجد نتائج",
+    "no_resources_found": "لم يتم العثور على موارد لهذه الفئة والمنطقة.",
+    "help_category": "فئة المساعدة",
+    "Back": "عودة",
+    "want_to_talk_with_Lala": "هل تريد التحدث مع لالا عما يحدث؟",
+    "click_here": "اضغط هنا!",
+    "phone": "هاتف",
+    "website": "موقع إلكتروني",
+    "hours": "ساعات العمل",
+    "providing": "يقدم",
+    "call_phone": "اتصال",
+    "visit_website": "زيارة الموقع",
+    "miles": "ميل",
+    "distance": "المسافة",
+    "load_more": "تحميل المزيد",
+    "providing_unknown": "الخدمات غير معروفة",
+    "unknown_name": "اسم غير معروف",
+    "unknown_address": "عنوان غير معروف"
+  },
+  "chatbot": {
+    "get_and_give_help": "احصل على المساعدة وقدمها خلال حرائق الغابات في كاليفورنيا"
   }
-  
+}

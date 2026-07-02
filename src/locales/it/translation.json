@@ -1,25 +1,36 @@
 {
-    "header": {
-      "title": "HelpNow",
-      "needHelp": "Ho bisogno di aiuto (risorse)",
-      "wantToHelp": "Voglio aiutare (volontariato e luoghi di donazione)"
-    },
-    "needhelp": {
-      "need_help": "Ho Bisogno di Aiuto",
-      "this_search_draws": "Questa ricerca utilizza",
-      "MALAN_resources_table": "Tabella delle risorse MALAN",
-      "zip_code": "Codice Postale",
-      "choose_category": "Scegli la categoria",
-      "search": "Cerca",
-      "no_results": "Nessun risultato",
-      "no_resources_found": "Nessuna risorsa trovata per questa categoria e area.",
-      "help_category": "Categoria di aiuto",
-      "Back": "Indietro",
-      "want_to_talk_with_Lala": "Vuoi parlare con Lala di quello che sta succedendo?",
-      "click_here": "Clicca qui!"
-    },
-    "chatbot": {
-      "get_and_give_help": "Ricevi e offri aiuto durante gli incendi in California"
-    }
+  "header": {
+    "title": "HelpNow",
+    "needHelp": "Ho bisogno di aiuto (risorse)",
+    "wantToHelp": "Voglio aiutare (volontariato e luoghi di donazione)"
+  },
+  "needhelp": {
+    "need_help": "Ho Bisogno di Aiuto",
+    "this_search_draws": "Questa ricerca utilizza",
+    "MALAN_resources_table": "Tabella delle risorse MALAN",
+    "zip_code": "Codice Postale",
+    "choose_category": "Scegli la categoria",
+    "search": "Cerca",
+    "no_results": "Nessun risultato",
+    "no_resources_found": "Nessuna risorsa trovata per questa categoria e area.",
+    "help_category": "Categoria di aiuto",
+    "Back": "Indietro",
+    "want_to_talk_with_Lala": "Vuoi parlare con Lala di quello che sta succedendo?",
+    "click_here": "Clicca qui!",
+    "phone": "Telefono",
+    "website": "Sito web",
+    "hours": "Orari",
+    "providing": "Offre",
+    "call_phone": "Chiama",
+    "visit_website": "Visita il sito",
+    "miles": "miglia",
+    "distance": "Distanza",
+    "load_more": "Carica altri risultati",
+    "providing_unknown": "Offerta non indicata",
+    "unknown_name": "Nome sconosciuto",
+    "unknown_address": "Indirizzo sconosciuto"
+  },
+  "chatbot": {
+    "get_and_give_help": "Ricevi e offri aiuto durante gli incendi in California"
   }
-  
+}

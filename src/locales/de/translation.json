@@ -1,25 +1,36 @@
 {
-    "header": {
-      "title": "HelpNow",
-      "needHelp": "Ich brauche Hilfe (Ressourcen)",
-      "wantToHelp": "Ich möchte helfen (Freiwilligenarbeit und Spendenorte)"
-    },
-    "needhelp": {
-      "need_help": "Ich Brauche Hilfe",
-      "this_search_draws": "Diese Suche zieht aus",
-      "MALAN_resources_table": "MALAN Ressourcen-Tabelle",
-      "zip_code": "Postleitzahl",
-      "choose_category": "Kategorie auswählen",
-      "search": "Suchen",
-      "no_results": "Keine Ergebnisse",
-      "no_resources_found": "Keine Ressourcen für diese Kategorie und Region gefunden.",
-      "help_category": "Hilfekategorie",
-      "Back": "Zurück",
-      "want_to_talk_with_Lala": "Möchten Sie mit Lala darüber sprechen, was passiert?",
-      "click_here": "Klicken Sie hier!"
-    },
-    "chatbot": {
-      "get_and_give_help": "Hilfe erhalten und geben während der Waldbrände in Kalifornien"
-    }
+  "header": {
+    "title": "HelpNow",
+    "needHelp": "Ich brauche Hilfe (Ressourcen)",
+    "wantToHelp": "Ich möchte helfen (Freiwilligenarbeit und Spendenorte)"
+  },
+  "needhelp": {
+    "need_help": "Ich Brauche Hilfe",
+    "this_search_draws": "Diese Suche zieht aus",
+    "MALAN_resources_table": "MALAN Ressourcen-Tabelle",
+    "zip_code": "Postleitzahl",
+    "choose_category": "Kategorie auswählen",
+    "search": "Suchen",
+    "no_results": "Keine Ergebnisse",
+    "no_resources_found": "Keine Ressourcen für diese Kategorie und Region gefunden.",
+    "help_category": "Hilfekategorie",
+    "Back": "Zurück",
+    "want_to_talk_with_Lala": "Möchten Sie mit Lala darüber sprechen, was passiert?",
+    "click_here": "Klicken Sie hier!",
+    "phone": "Telefon",
+    "website": "Website",
+    "hours": "Öffnungszeiten",
+    "providing": "Angebot",
+    "call_phone": "Anrufen",
+    "visit_website": "Website besuchen",
+    "miles": "Meilen",
+    "distance": "Entfernung",
+    "load_more": "Mehr Ergebnisse laden",
+    "providing_unknown": "Angebot unbekannt",
+    "unknown_name": "Unbekannter Name",
+    "unknown_address": "Unbekannte Adresse"
+  },
+  "chatbot": {
+    "get_and_give_help": "Hilfe erhalten und geben während der Waldbrände in Kalifornien"
   }
-  
+}

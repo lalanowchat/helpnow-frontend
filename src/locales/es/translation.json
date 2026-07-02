@@ -16,7 +16,19 @@
     "help_category": "Categoría de ayuda",
     "Back": "Atrás",
     "want_to_talk_with_Lala": "¿Quieres hablar con Lala sobre lo que está pasando?",
-    "click_here": "¡Haz clic aquí!"
+    "click_here": "¡Haz clic aquí!",
+    "phone": "Teléfono",
+    "website": "Sitio web",
+    "hours": "Horario",
+    "providing": "Ofrece",
+    "call_phone": "Llamar",
+    "visit_website": "Visitar sitio web",
+    "miles": "millas",
+    "distance": "Distancia",
+    "load_more": "Cargar más resultados",
+    "providing_unknown": "Servicios no indicados",
+    "unknown_name": "Nombre desconocido",
+    "unknown_address": "Dirección desconocida"
   },
   "chatbot": {
     "get_and_give_help": "Obtenga y brinde ayuda durante los incendios forestales en California"

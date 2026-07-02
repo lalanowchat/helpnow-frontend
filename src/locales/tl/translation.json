@@ -1,25 +1,36 @@
 {
-    "header": {
-      "title": "HelpNow",
-      "needHelp": "Kailangan ko ng tulong (mga mapagkukunan)",
-      "wantToHelp": "Gusto kong tumulong (volunteer at lokasyon ng donasyon)"
-    },
-    "needhelp": {
-      "need_help": "Kailangan Ko ng Tulong",
-      "this_search_draws": "Ang paghahanap na ito ay kumukuha mula sa",
-      "MALAN_resources_table": "MALAN_resources_table",
-      "zip_code": "Zip Code",
-      "choose_category": "Piliin ang Kategorya",
-      "search": "Maghanap",
-      "no_results": "Walang Resulta",
-      "no_resources_found": "Walang nahanap na mapagkukunan para sa kategorya at lugar na ito.",
-      "help_category": "Kategorya ng Tulong",
-      "Back": "Bumalik",
-      "want_to_talk_with_Lala": "Gusto mo bang makipag-usap kay Lala tungkol sa nangyayari?",
-      "click_here": "I-click dito!"
-    },
-    "chatbot": {
-      "get_and_give_help": "Humingi at magbigay ng tulong sa panahon ng California Wildfires"
-    }
+  "header": {
+    "title": "HelpNow",
+    "needHelp": "Kailangan ko ng tulong (mga mapagkukunan)",
+    "wantToHelp": "Gusto kong tumulong (volunteer at lokasyon ng donasyon)"
+  },
+  "needhelp": {
+    "need_help": "Kailangan Ko ng Tulong",
+    "this_search_draws": "Ang paghahanap na ito ay kumukuha mula sa",
+    "MALAN_resources_table": "MALAN_resources_table",
+    "zip_code": "Zip Code",
+    "choose_category": "Piliin ang Kategorya",
+    "search": "Maghanap",
+    "no_results": "Walang Resulta",
+    "no_resources_found": "Walang nahanap na mapagkukunan para sa kategorya at lugar na ito.",
+    "help_category": "Kategorya ng Tulong",
+    "Back": "Bumalik",
+    "want_to_talk_with_Lala": "Gusto mo bang makipag-usap kay Lala tungkol sa nangyayari?",
+    "click_here": "I-click dito!",
+    "phone": "Telepono",
+    "website": "Website",
+    "hours": "Oras",
+    "providing": "Nagbibigay",
+    "call_phone": "Tumawag",
+    "visit_website": "Bisitahin ang website",
+    "miles": "milya",
+    "distance": "Distansya",
+    "load_more": "Mag-load pa",
+    "providing_unknown": "Hindi alam ang serbisyo",
+    "unknown_name": "Hindi kilalang pangalan",
+    "unknown_address": "Hindi kilalang address"
+  },
+  "chatbot": {
+    "get_and_give_help": "Humingi at magbigay ng tulong sa panahon ng California Wildfires"
   }
-  
+}
