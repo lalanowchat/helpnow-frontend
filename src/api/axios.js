@@ -1,3 +1,8 @@
+/**
+ * Shared API client. GET/HEAD requests retry on Fly cold-start failures
+ * (502/503/504, network, timeout) with backoff; UI listens via apiRetryStatus.
+ * Pass config.__noRetry to skip retries for a single request.
+ */
 import axios from 'axios'
 import { setApiRetryAttempt } from '@/lib/apiRetryStatus'
 
@@ -38,6 +43,7 @@ function isRetryableError(error) {
   return RETRYABLE_STATUSES.has(error.response.status)
 }
 
+// Retry only idempotent GET/HEAD; publish attempt count for Need Help wait messaging.
 axiosInstance.interceptors.response.use(
   (response) => {
     setApiRetryAttempt(0)

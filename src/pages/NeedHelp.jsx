@@ -81,6 +81,7 @@ function ResourceCard({ resource, showDistance, t, isSelected, onSelect, cardRef
 }
 
 export default function NeedHelp() {
+  // Show categories immediately when Home prefetch (or a prior visit) filled sessionStorage.
   const initialCachedCategories = readCachedNeedHelpCategories();
   const [categories, setCategories] = useState(initialCachedCategories ?? []);
   const [translatedCategories, setTranslatedCategories] = useState([]);
@@ -99,6 +100,7 @@ export default function NeedHelp() {
   const [selectedOrgId, setSelectedOrgId] = useState(null);
   const [translatedSubcategories, setTranslatedSubcategories] = useState({});
   const [translatedHours, setTranslatedHours] = useState({});
+  // Mirrors axios GET retry count so we can show "server starting" vs first connect.
   const [apiRetryAttempt, setApiRetryAttempt] = useState(0);
   const [categoriesError, setCategoriesError] = useState(false);
   const cardRefs = useRef({});
@@ -179,6 +181,7 @@ export default function NeedHelp() {
     cardRefs.current = {};
   }, []);
 
+  // Stale-while-revalidate: cached list above renders first; refresh replaces when API responds.
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -202,6 +205,7 @@ export default function NeedHelp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Subscribe to axios cold-start retries (see src/api/axios.js).
   useEffect(() => subscribeApiRetry(setApiRetryAttempt), []);
 
   useEffect(() => {

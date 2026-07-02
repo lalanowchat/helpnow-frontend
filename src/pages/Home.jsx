@@ -9,6 +9,7 @@ import { prefetchBackendForNeedHelp } from '@/lib/needHelpCategories';
 export default function Home() {
   const { t } = useTranslation();
 
+  // Wake Fly backend and cache Need Help categories before the user opens that page.
   useEffect(() => {
     prefetchBackendForNeedHelp();
   }, []);
