@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
-//import { MapContainer, TileLayer } from "react-leaflet";
 import 'leaflet/dist/leaflet.css';
+import { buildMapPopupHtml } from '@/lib/needHelpContact';
 
 // Fix marker icons for production
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -14,60 +14,54 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-// --- Fix for default marker icons in React-Leaflet ---
-// Without this, the default blue markers will appear as broken images.
 delete L.Icon.Default.prototype._getIconUrl;
 
 // Flagstaff / Sedona area — matches Need Help default ZIP (86001)
 const DEFAULT_MAP_CENTER = [35.0, -111.7];
 const DEFAULT_MAP_ZOOM = 10;
 
-const MapComponent = ({ resources }) => {
-  const mapRef = useRef(null);                // Map Reference object
-  const markersLayerGroupRef = useRef(null);  // Markers Layer Reference object
+const MapComponent = ({ resources, mapLabels, showDistance }) => {
+  const mapRef = useRef(null);
+  const markersLayerGroupRef = useRef(null);
 
   useEffect(() => {
-
-    // This prevents a "Map container is already initialized" error. 
-    // Prevents re-initializing a map container, if it has already been initialized
     if (mapRef.current) {
       mapRef.current.off();
       mapRef.current.remove();
-    } 
-    // Initial view covers Flagstaff and Sedona before markers load
+    }
     mapRef.current = L.map('map').setView(DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM);
 
-    // Add a tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
     }).addTo(mapRef.current);
 
-    // Create a layer group for markers
-    markersLayerGroupRef.current = L.layerGroup().addTo(mapRef.current); // 'mapRef.current' is your L.Map instance
+    markersLayerGroupRef.current = L.layerGroup().addTo(mapRef.current);
 
-    // Update markers when resources change
     if (markersLayerGroupRef.current) {
       markersLayerGroupRef.current.clearLayers();
-      resources
-      .filter((resource) => resource.Org_Latitude !== undefined && resource.Org_Longitude !== undefined) // Validate lat and lng
-      .forEach((resource) => {
-        const marker = L.marker([resource.Org_Latitude, resource.Org_Longitude]);
-        //console.log("Organz Name: ", resource.Org_Name); console.log("Current Lat: ", resource.Org_Latitude);console.log("Current Lon: ", resource.Org_Longitude); console.log("------------------");   
+      const bounds = [];
 
-        marker.bindPopup(
-          [
-            `<strong>${resource.Org_Name || 'Unknown Name'}</strong>`,
-            resource.Org_FullAddress || 'Unknown Address',
-            resource.Org_Hours ? `<b>Hours:</b> ${resource.Org_Hours}` : '',
-            resource.providing ? `<b>Providing:</b> ${resource.providing}` : 'Providing Unknown',
-          ].filter(Boolean).join('<br>')
-        );
-        markersLayerGroupRef.current.addLayer(marker);
-      });
+      resources
+        .filter((resource) => resource.Org_Latitude !== undefined && resource.Org_Longitude !== undefined)
+        .forEach((resource) => {
+          const lat = resource.Org_Latitude;
+          const lng = resource.Org_Longitude;
+          bounds.push([lat, lng]);
+
+          const marker = L.marker([lat, lng]);
+          marker.bindPopup(buildMapPopupHtml(resource, mapLabels, showDistance));
+          markersLayerGroupRef.current.addLayer(marker);
+        });
+
+      if (bounds.length > 1) {
+        mapRef.current.fitBounds(bounds, { padding: [24, 24] });
+      } else if (bounds.length === 1) {
+        mapRef.current.setView(bounds[0], 12);
+      }
+
       markersLayerGroupRef.current.addTo(mapRef.current);
     }
-
-  }, [resources]); //Re-run effect, i.e. update Map UI, if the new coordinates are passed into MapComponent from server API call
+  }, [resources, mapLabels, showDistance]);
 
   return <div id="map" style={{ height: '500px', width: '100%' }} />;
 };
