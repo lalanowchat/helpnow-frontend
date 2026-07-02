@@ -16,7 +16,7 @@ import OrgContactActions from "@/components/OrgContactActions";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { translateText } from "../translateText";
 import { cn } from "@/lib/utils";
-import { formatProviding } from "@/lib/needHelpContact";
+import { formatProviding, formatHours } from "@/lib/needHelpContact";
 
 const DEFAULT_ZIP = "86001";
 const PAGE_STEP = 10;
@@ -28,7 +28,7 @@ function orgKey(resource) {
 
 /** Org card: address, contact buttons, hours, then resource subcategories. */
 function ResourceCard({ resource, showDistance, t, isSelected, onSelect, cardRef }) {
-  const hours = resource.Org_Hours?.trim();
+  const hours = resource.displayHours ?? resource.Org_Hours?.trim();
   const providing = resource.displayProviding ?? resource.providing;
 
   return (
@@ -87,6 +87,7 @@ export default function NeedHelp() {
   const [reachedEnd, setReachedEnd] = useState(false);
   const [selectedOrgId, setSelectedOrgId] = useState(null);
   const [translatedSubcategories, setTranslatedSubcategories] = useState({});
+  const [translatedHours, setTranslatedHours] = useState({});
   const cardRefs = useRef({});
   const resourcesRef = useRef(resources);
   const { t, i18n } = useTranslation();
@@ -120,8 +121,9 @@ export default function NeedHelp() {
           translatedSubcategories,
           i18n.language
         ),
+        displayHours: formatHours(resource.Org_Hours, translatedHours, i18n.language),
       })),
-    [resources, translatedSubcategories, i18n.language]
+    [resources, translatedSubcategories, translatedHours, i18n.language]
   );
 
   const fetchResources = useCallback(
@@ -198,23 +200,31 @@ export default function NeedHelp() {
   useEffect(() => {
     if (i18n.language.startsWith("en") || resources.length === 0) {
       setTranslatedSubcategories({});
+      setTranslatedHours({});
       return;
     }
-    const unique = new Set();
+    const uniqueSubs = new Set();
+    const uniqueHours = new Set();
     resources.forEach((resource) => {
       resource.providing
         ?.split(",")
         .map((s) => s.trim())
         .filter(Boolean)
-        .forEach((sub) => unique.add(sub));
+        .forEach((sub) => uniqueSubs.add(sub));
+      const hours = resource.Org_Hours?.trim();
+      if (hours) uniqueHours.add(hours);
     });
     let cancelled = false;
     (async () => {
       const lang = i18n.language.toUpperCase();
-      const entries = await Promise.all(
-        [...unique].map(async (sub) => [sub, await translateText(sub, lang)])
-      );
-      if (!cancelled) setTranslatedSubcategories(Object.fromEntries(entries));
+      const [subEntries, hourEntries] = await Promise.all([
+        Promise.all([...uniqueSubs].map(async (sub) => [sub, await translateText(sub, lang)])),
+        Promise.all([...uniqueHours].map(async (h) => [h, await translateText(h, lang)])),
+      ]);
+      if (!cancelled) {
+        setTranslatedSubcategories(Object.fromEntries(subEntries));
+        setTranslatedHours(Object.fromEntries(hourEntries));
+      }
     })();
     return () => {
       cancelled = true;
