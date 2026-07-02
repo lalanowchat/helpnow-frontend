@@ -31,7 +31,9 @@
     "no_more_results": "Больше результатов нет",
     "providing_unknown": "Услуги не указаны",
     "unknown_name": "Неизвестное имя",
-    "unknown_address": "Неизвестный адрес"
+    "unknown_address": "Неизвестный адрес",
+    "loading_categories": "Загрузка категорий…",
+    "connecting_server": "Подключение к серверу, подождите немного…"
   },
   "chatbot": {
     "get_and_give_help": "Получайте и оказывайте помощь во время лесных пожаров в Калифорнии"

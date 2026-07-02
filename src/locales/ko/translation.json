@@ -31,7 +31,9 @@
     "no_more_results": "더 이상 결과 없음",
     "providing_unknown": "제공 정보 없음",
     "unknown_name": "이름 없음",
-    "unknown_address": "주소 없음"
+    "unknown_address": "주소 없음",
+    "loading_categories": "카테고리 불러오는 중…",
+    "connecting_server": "서버에 연결 중입니다. 잠시만 기다려 주세요…"
   },
   "chatbot": {
     "get_and_give_help": "캘리포니아 산불 동안 도움을 받고 주십시오"

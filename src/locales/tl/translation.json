@@ -31,7 +31,9 @@
     "no_more_results": "Wala nang iba pang resulta",
     "providing_unknown": "Hindi alam ang serbisyo",
     "unknown_name": "Hindi kilalang pangalan",
-    "unknown_address": "Hindi kilalang address"
+    "unknown_address": "Hindi kilalang address",
+    "loading_categories": "Naglo-load ng mga kategorya…",
+    "connecting_server": "Kumokonekta sa server, maaaring tumagal sandali…"
   },
   "chatbot": {
     "get_and_give_help": "Humingi at magbigay ng tulong sa panahon ng California Wildfires"

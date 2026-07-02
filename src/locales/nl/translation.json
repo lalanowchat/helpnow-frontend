@@ -31,7 +31,9 @@
     "no_more_results": "Geen resultaten meer",
     "providing_unknown": "Aanbod onbekend",
     "unknown_name": "Onbekende naam",
-    "unknown_address": "Onbekend adres"
+    "unknown_address": "Onbekend adres",
+    "loading_categories": "Categorieën laden…",
+    "connecting_server": "Verbinden met server, even geduld…"
   },
   "chatbot": {
     "get_and_give_help": "Krijg en geef hulp tijdens bosbranden in Californië"

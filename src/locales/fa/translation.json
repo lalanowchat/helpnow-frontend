@@ -31,7 +31,9 @@
     "no_more_results": "نتیجه‌ای بیشتر وجود ندارد",
     "providing_unknown": "خدمات نامشخص",
     "unknown_name": "نام نامشخص",
-    "unknown_address": "آدرس نامشخص"
+    "unknown_address": "آدرس نامشخص",
+    "loading_categories": "در حال بارگذاری دسته‌ها…",
+    "connecting_server": "در حال اتصال به سرور، لطفاً کمی صبر کنید…"
   },
   "chatbot": {
     "get_and_give_help": "در طول آتش‌سوزی‌های کالیفرنیا کمک بگیرید و کمک کنید"

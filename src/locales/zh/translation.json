@@ -31,7 +31,9 @@
     "no_more_results": "没有更多结果",
     "providing_unknown": "提供服务未知",
     "unknown_name": "名称未知",
-    "unknown_address": "地址未知"
+    "unknown_address": "地址未知",
+    "loading_categories": "正在加载类别…",
+    "connecting_server": "正在连接服务器，可能需要一点时间…"
   },
   "chatbot": {
     "get_and_give_help": "在加州野火期间获得和提供帮助"

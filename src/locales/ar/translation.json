@@ -31,7 +31,9 @@
     "no_more_results": "لا مزيد من النتائج",
     "providing_unknown": "الخدمات غير معروفة",
     "unknown_name": "اسم غير معروف",
-    "unknown_address": "عنوان غير معروف"
+    "unknown_address": "عنوان غير معروف",
+    "loading_categories": "جاري تحميل الفئات…",
+    "connecting_server": "جاري الاتصال بالخادم، قد يستغرق ذلك لحظة…"
   },
   "chatbot": {
     "get_and_give_help": "احصل على المساعدة وقدمها خلال حرائق الغابات في كاليفورنيا"

@@ -31,7 +31,9 @@
     "no_more_results": "Không còn kết quả",
     "providing_unknown": "Chưa rõ dịch vụ",
     "unknown_name": "Tên không rõ",
-    "unknown_address": "Địa chỉ không rõ"
+    "unknown_address": "Địa chỉ không rõ",
+    "loading_categories": "Đang tải danh mục…",
+    "connecting_server": "Đang kết nối máy chủ, vui lòng đợi…"
   },
   "chatbot": {
     "get_and_give_help": "Nhận và cung cấp trợ giúp trong thời gian cháy rừng tại California"

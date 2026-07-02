@@ -31,7 +31,9 @@
     "no_more_results": "Այլ արդյունքներ չկան",
     "providing_unknown": "Տրամադրումը անհայտ է",
     "unknown_name": "Անհայտ անուն",
-    "unknown_address": "Անհայտ հասցե"
+    "unknown_address": "Անհայտ հասցե",
+    "loading_categories": "Կատեգորիաները բեռնվում են…",
+    "connecting_server": "Կապ հաստատվում է սերվերի հետ, սպասեք…"
   },
   "chatbot": {
     "get_and_give_help": "Ստացեք և տրամադրեք օգնություն Կալիֆորնիայի անտառային հրդեհների ժամանակ"

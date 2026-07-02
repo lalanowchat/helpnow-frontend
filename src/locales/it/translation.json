@@ -31,7 +31,9 @@
     "no_more_results": "Nessun altro risultato",
     "providing_unknown": "Offerta non indicata",
     "unknown_name": "Nome sconosciuto",
-    "unknown_address": "Indirizzo sconosciuto"
+    "unknown_address": "Indirizzo sconosciuto",
+    "loading_categories": "Caricamento categorie…",
+    "connecting_server": "Connessione al server, potrebbe richiedere un momento…"
   },
   "chatbot": {
     "get_and_give_help": "Ricevi e offri aiuto durante gli incendi in California"

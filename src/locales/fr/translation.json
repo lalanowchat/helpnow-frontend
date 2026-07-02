@@ -31,7 +31,9 @@
     "no_more_results": "Plus de résultats",
     "providing_unknown": "Services non précisés",
     "unknown_name": "Nom inconnu",
-    "unknown_address": "Adresse inconnue"
+    "unknown_address": "Adresse inconnue",
+    "loading_categories": "Chargement des catégories…",
+    "connecting_server": "Connexion au serveur, cela peut prendre un moment…"
   },
   "chatbot": {
     "get_and_give_help": "Obtenez et offrez de l'aide pendant les incendies de forêt en Californie"

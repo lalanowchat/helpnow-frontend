@@ -31,7 +31,9 @@
     "no_more_results": "और परिणाम नहीं",
     "providing_unknown": "प्रदान की जानकारी नहीं",
     "unknown_name": "अज्ञात नाम",
-    "unknown_address": "अज्ञात पता"
+    "unknown_address": "अज्ञात पता",
+    "loading_categories": "श्रेणियाँ लोड हो रही हैं…",
+    "connecting_server": "सर्वर से कनेक्ट हो रहा है, कृपया प्रतीक्षा करें…"
   },
   "chatbot": {
     "get_and_give_help": "कैलिफोर्निया जंगल की आग के दौरान मदद लें और मदद करें"
