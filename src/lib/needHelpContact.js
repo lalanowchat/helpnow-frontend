@@ -1,5 +1,18 @@
 /** Shared phone/website helpers for Need Help cards and map popups. */
 
+/** Comma-separated subcategories; translated per segment when locale is not English. */
+export function formatProviding(providing, translatedBySubcategory, language) {
+  if (!providing?.trim()) return "";
+  const trimmed = providing.trim();
+  if (language.startsWith("en")) return trimmed;
+  return trimmed
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((sub) => translatedBySubcategory[sub] ?? sub)
+    .join(", ");
+}
+
 export function websiteHref(url) {
   if (!url) return null;
   return /^https?:\/\//i.test(url) ? url : `https://${url}`;
@@ -59,9 +72,9 @@ export function buildMapPopupHtml(resource, labels, showDistance) {
     parts.push(`<b>${escapeHtml(labels.hours)}:</b> ${escapeHtml(hours)}`);
   }
 
-  parts.push(
-    `<b>${escapeHtml(labels.providing)}:</b> ${escapeHtml(resource.providing || labels.providingUnknown)}`
-  );
+  const providingText =
+    resource.displayProviding ?? resource.providing ?? labels.providingUnknown;
+  parts.push(`<b>${escapeHtml(labels.providing)}:</b> ${escapeHtml(providingText)}`);
 
   return parts.filter(Boolean).join("<br>");
 }
