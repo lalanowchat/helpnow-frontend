@@ -18,6 +18,75 @@ import { translateText } from "../translateText"; // Import translation function
 // Pocket Fire / Flagstaff–Sedona default search area
 const DEFAULT_ZIP = "86001";
 
+function websiteHref(url) {
+  if (!url) return null;
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+}
+
+function phoneTelHref(phone) {
+  const digits = phone.replace(/[^\d+]/g, "");
+  return digits ? `tel:${digits}` : null;
+}
+
+/** Org card: address, contact links, then providing text (matches /by-zip field order). */
+function ResourceCard({ resource, showDistance, t }) {
+  const phone = resource.Org_PhoneNumber?.trim();
+  const website = resource.Org_URL?.trim();
+  const href = website ? websiteHref(website) : null;
+  const tel = phone ? phoneTelHref(phone) : null;
+
+  return (
+    <Card className="shadow-md">
+      <CardHeader>
+        <div className="flex justify-between items-start">
+          <div>
+            <CardTitle>{resource.Org_Name}</CardTitle>
+            <br />
+            <CardDescription>{resource.Org_FullAddress}</CardDescription>
+          </div>
+          {showDistance && resource.distance != null && (
+            <span className="font-bold text-blue-500">
+              {resource.distance.toFixed(1)} miles
+            </span>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="text-left space-y-2">
+        {(phone || website) && (
+          <div className="text-sm text-muted-foreground space-y-1">
+            {phone && tel && (
+              <p>
+                <b>{t("needhelp.phone")}:</b>{" "}
+                <a href={tel} className="text-primary hover:underline">
+                  {phone}
+                </a>
+              </p>
+            )}
+            {website && href && (
+              <p>
+                <b>{t("needhelp.website")}:</b>{" "}
+                <a
+                  href={href}
+                  className="text-primary hover:underline break-all"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {website}
+                </a>
+              </p>
+            )}
+          </div>
+        )}
+        {resource.providing && (
+          <p className="whitespace-pre-line">
+            <b>{t("needhelp.providing")}:</b> {resource.providing}
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function NeedHelp() {
   const [categories, setCategories] = useState([]);
   const [translatedCategories, setTranslatedCategories] = useState([]);
@@ -27,7 +96,7 @@ export default function NeedHelp() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  // Fetch categories from backend
+  // Categories from API (dev.category — AZ orgs with mappable addresses)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -208,26 +277,13 @@ export default function NeedHelp() {
           </CardHeader>
         </Card>
       ) : (
-        resources.slice(0, 3).map((resource, index) => ( // Show first 3 resources
-          <Card key={index} className="shadow-md">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle>{resource.Org_Name}</CardTitle>
-                  <br />
-                  <CardDescription> {resource.Org_FullAddress} </CardDescription>
-                </div>
-                {zipCode && (
-                  <span className="font-bold text-blue-500">
-                    {resource.distance.toFixed(1)} miles
-                  </span>
-                )}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="whitespace-pre-line text-left"> <b> providing: </b> {resource.providing} </p>
-            </CardContent>
-          </Card>
+        resources.slice(0, 3).map((resource) => (
+          <ResourceCard
+            key={resource.Org_Id ?? resource.Org_Name}
+            resource={resource}
+            showDistance={Boolean(zipCode)}
+            t={t}
+          />
         ))
       )}
     </div>
@@ -241,26 +297,13 @@ export default function NeedHelp() {
 
   {/* Full-Width Resource Grid After Map Finishes */}
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-    {resources.slice(3).map((resource, index) => ( // Remaining resources go full-width
-      <Card key={index} className="shadow-md">
-        <CardHeader>
-          <div className="flex justify-between items-start">
-            <div>
-              <CardTitle>{resource.Org_Name}</CardTitle>
-               <br />
-              <CardDescription>{resource.Org_FullAddress}</CardDescription>
-            </div>
-            {zipCode && (
-              <span className="font-bold text-blue-500">
-                {resource.distance.toFixed(1)} miles
-              </span>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="whitespace-pre-line text-left"> <b> providing: </b> {resource.providing} </p>
-        </CardContent>
-      </Card>
+    {resources.slice(3).map((resource) => (
+      <ResourceCard
+        key={resource.Org_Id ?? resource.Org_Name}
+        resource={resource}
+        showDistance={Boolean(zipCode)}
+        t={t}
+      />
     ))}
   </div>
 </div>
