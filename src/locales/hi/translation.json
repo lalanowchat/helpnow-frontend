@@ -26,6 +26,9 @@
     "miles": "मील",
     "distance": "दूरी",
     "load_more": "और परिणाम लोड करें",
+    "loading": "परिणाम लोड हो रहे हैं…",
+    "loading_more": "और लोड हो रहा है…",
+    "no_more_results": "और परिणाम नहीं",
     "providing_unknown": "प्रदान की जानकारी नहीं",
     "unknown_name": "अज्ञात नाम",
     "unknown_address": "अज्ञात पता"

@@ -26,6 +26,9 @@
     "miles": "マイル",
     "distance": "距離",
     "load_more": "さらに読み込む",
+    "loading": "結果を読み込み中…",
+    "loading_more": "さらに読み込み中…",
+    "no_more_results": "これ以上結果はありません",
     "providing_unknown": "提供内容不明",
     "unknown_name": "名称不明",
     "unknown_address": "住所不明"

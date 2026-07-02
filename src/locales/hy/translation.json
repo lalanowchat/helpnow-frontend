@@ -26,6 +26,9 @@
     "miles": "մղոն",
     "distance": "Հեռավորություն",
     "load_more": "Բեռնել ավելին",
+    "loading": "Արդյունքները բեռնվում են…",
+    "loading_more": "Բեռնվում է ավելին…",
+    "no_more_results": "Այլ արդյունքներ չկան",
     "providing_unknown": "Տրամադրումը անհայտ է",
     "unknown_name": "Անհայտ անուն",
     "unknown_address": "Անհայտ հասցե"

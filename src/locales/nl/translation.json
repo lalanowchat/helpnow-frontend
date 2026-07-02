@@ -26,6 +26,9 @@
     "miles": "mijl",
     "distance": "Afstand",
     "load_more": "Meer resultaten laden",
+    "loading": "Resultaten laden…",
+    "loading_more": "Meer laden…",
+    "no_more_results": "Geen resultaten meer",
     "providing_unknown": "Aanbod onbekend",
     "unknown_name": "Onbekende naam",
     "unknown_address": "Onbekend adres"

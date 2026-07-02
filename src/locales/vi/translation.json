@@ -26,6 +26,9 @@
     "miles": "dặm",
     "distance": "Khoảng cách",
     "load_more": "Tải thêm kết quả",
+    "loading": "Đang tải kết quả…",
+    "loading_more": "Đang tải thêm…",
+    "no_more_results": "Không còn kết quả",
     "providing_unknown": "Chưa rõ dịch vụ",
     "unknown_name": "Tên không rõ",
     "unknown_address": "Địa chỉ không rõ"

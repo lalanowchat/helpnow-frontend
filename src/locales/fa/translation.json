@@ -26,6 +26,9 @@
     "miles": "مایل",
     "distance": "فاصله",
     "load_more": "بارگذاری بیشتر",
+    "loading": "در حال بارگذاری نتایج…",
+    "loading_more": "در حال بارگذاری بیشتر…",
+    "no_more_results": "نتیجه‌ای بیشتر وجود ندارد",
     "providing_unknown": "خدمات نامشخص",
     "unknown_name": "نام نامشخص",
     "unknown_address": "آدرس نامشخص"

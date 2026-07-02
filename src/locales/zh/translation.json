@@ -26,6 +26,9 @@
     "miles": "英里",
     "distance": "距离",
     "load_more": "加载更多结果",
+    "loading": "正在加载结果…",
+    "loading_more": "正在加载更多…",
+    "no_more_results": "没有更多结果",
     "providing_unknown": "提供服务未知",
     "unknown_name": "名称未知",
     "unknown_address": "地址未知"

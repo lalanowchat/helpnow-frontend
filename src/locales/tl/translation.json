@@ -26,6 +26,9 @@
     "miles": "milya",
     "distance": "Distansya",
     "load_more": "Mag-load pa",
+    "loading": "Naglo-load ng mga resulta…",
+    "loading_more": "Naglo-load pa…",
+    "no_more_results": "Wala nang iba pang resulta",
     "providing_unknown": "Hindi alam ang serbisyo",
     "unknown_name": "Hindi kilalang pangalan",
     "unknown_address": "Hindi kilalang address"

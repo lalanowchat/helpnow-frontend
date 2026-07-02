@@ -26,6 +26,9 @@
     "miles": "миль",
     "distance": "Расстояние",
     "load_more": "Загрузить ещё",
+    "loading": "Загрузка результатов…",
+    "loading_more": "Загрузка…",
+    "no_more_results": "Больше результатов нет",
     "providing_unknown": "Услуги не указаны",
     "unknown_name": "Неизвестное имя",
     "unknown_address": "Неизвестный адрес"

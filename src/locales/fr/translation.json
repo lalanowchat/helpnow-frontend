@@ -26,6 +26,9 @@
     "miles": "miles",
     "distance": "Distance",
     "load_more": "Charger plus de résultats",
+    "loading": "Chargement des résultats…",
+    "loading_more": "Chargement…",
+    "no_more_results": "Plus de résultats",
     "providing_unknown": "Services non précisés",
     "unknown_name": "Nom inconnu",
     "unknown_address": "Adresse inconnue"

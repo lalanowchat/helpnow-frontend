@@ -26,6 +26,9 @@
     "miles": "miglia",
     "distance": "Distanza",
     "load_more": "Carica altri risultati",
+    "loading": "Caricamento risultati…",
+    "loading_more": "Caricamento…",
+    "no_more_results": "Nessun altro risultato",
     "providing_unknown": "Offerta non indicata",
     "unknown_name": "Nome sconosciuto",
     "unknown_address": "Indirizzo sconosciuto"

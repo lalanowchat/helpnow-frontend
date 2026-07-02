@@ -26,6 +26,9 @@
     "miles": "마일",
     "distance": "거리",
     "load_more": "더 보기",
+    "loading": "결과 불러오는 중…",
+    "loading_more": "더 불러오는 중…",
+    "no_more_results": "더 이상 결과 없음",
     "providing_unknown": "제공 정보 없음",
     "unknown_name": "이름 없음",
     "unknown_address": "주소 없음"

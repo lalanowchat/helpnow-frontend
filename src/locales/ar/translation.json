@@ -26,6 +26,9 @@
     "miles": "ميل",
     "distance": "المسافة",
     "load_more": "تحميل المزيد",
+    "loading": "جاري تحميل النتائج…",
+    "loading_more": "جاري تحميل المزيد…",
+    "no_more_results": "لا مزيد من النتائج",
     "providing_unknown": "الخدمات غير معروفة",
     "unknown_name": "اسم غير معروف",
     "unknown_address": "عنوان غير معروف"
