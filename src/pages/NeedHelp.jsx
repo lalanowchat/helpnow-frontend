@@ -28,10 +28,11 @@ function phoneTelHref(phone) {
   return digits ? `tel:${digits}` : null;
 }
 
-/** Org card: address, contact links, then providing text (matches /by-zip field order). */
+/** Org card: address, contact, hours, then resource subcategories (matches /by-zip fields). */
 function ResourceCard({ resource, showDistance, t }) {
   const phone = resource.Org_PhoneNumber?.trim();
   const website = resource.Org_URL?.trim();
+  const hours = resource.Org_Hours?.trim();
   const href = website ? websiteHref(website) : null;
   const tel = phone ? phoneTelHref(phone) : null;
 
@@ -77,8 +78,13 @@ function ResourceCard({ resource, showDistance, t }) {
             )}
           </div>
         )}
+        {hours && (
+          <p>
+            <b>{t("needhelp.hours")}:</b> {hours}
+          </p>
+        )}
         {resource.providing && (
-          <p className="whitespace-pre-line">
+          <p>
             <b>{t("needhelp.providing")}:</b> {resource.providing}
           </p>
         )}

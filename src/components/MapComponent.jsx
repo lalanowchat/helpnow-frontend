@@ -55,7 +55,12 @@ const MapComponent = ({ resources }) => {
         //console.log("Organz Name: ", resource.Org_Name); console.log("Current Lat: ", resource.Org_Latitude);console.log("Current Lon: ", resource.Org_Longitude); console.log("------------------");   
 
         marker.bindPopup(
-          `<strong>${resource.Org_Name || 'Unknown Name'}</strong><br>${resource.Org_FullAddress || 'Unknown Address'}<br><br>${resource.providing || 'Providing Unknown'}`
+          [
+            `<strong>${resource.Org_Name || 'Unknown Name'}</strong>`,
+            resource.Org_FullAddress || 'Unknown Address',
+            resource.Org_Hours ? `<b>Hours:</b> ${resource.Org_Hours}` : '',
+            resource.providing ? `<b>Providing:</b> ${resource.providing}` : 'Providing Unknown',
+          ].filter(Boolean).join('<br>')
         );
         markersLayerGroupRef.current.addLayer(marker);
       });
