@@ -17,6 +17,10 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { translateText } from "../translateText";
 import { cn } from "@/lib/utils";
 import { formatProviding, formatHours } from "@/lib/needHelpContact";
+import {
+  refreshNeedHelpCategories,
+  readCachedNeedHelpCategories,
+} from "@/lib/needHelpCategories";
 
 const DEFAULT_ZIP = "86001";
 const PAGE_STEP = 10;
@@ -76,10 +80,16 @@ function ResourceCard({ resource, showDistance, t, isSelected, onSelect, cardRef
 }
 
 export default function NeedHelp() {
-  const [categories, setCategories] = useState([]);
+  const initialCachedCategories = readCachedNeedHelpCategories();
+  const [categories, setCategories] = useState(initialCachedCategories ?? []);
   const [translatedCategories, setTranslatedCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(
+    !(initialCachedCategories?.length)
+  );
   const [zipCode, setZipCode] = useState(DEFAULT_ZIP);
-  const [chosenCategory, setChosenCategory] = useState("");
+  const [chosenCategory, setChosenCategory] = useState(
+    initialCachedCategories?.[0] ?? ""
+  );
   const [resources, setResources] = useState([]);
   const [pageSize, setPageSize] = useState(PAGE_STEP);
   const [loading, setLoading] = useState(false);
@@ -164,18 +174,24 @@ export default function NeedHelp() {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
+    let cancelled = false;
+    (async () => {
+      if (!initialCachedCategories?.length) setLoadingCategories(true);
       try {
-        const { data } = await axiosInstance.get("/resources/need-help-categories");
+        const data = await refreshNeedHelpCategories();
+        if (cancelled || !data?.length) return;
         setCategories(data);
-        if (data.length > 0) {
-          setChosenCategory(data[0]);
-        }
+        setChosenCategory((prev) => (prev && data.includes(prev) ? prev : data[0]));
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
+      } finally {
+        if (!cancelled) setLoadingCategories(false);
       }
+    })();
+    return () => {
+      cancelled = true;
     };
-    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -327,6 +343,7 @@ export default function NeedHelp() {
                     <FormLabel>{t("needhelp.help_category")}</FormLabel>
                     <Select
                       value={chosenCategory}
+                      disabled={loadingCategories || categories.length === 0}
                       onValueChange={(value) => {
                         setChosenCategory(value);
                         field.onChange(value);
@@ -334,17 +351,29 @@ export default function NeedHelp() {
                     >
                       <FormControl>
                         <SelectTrigger className="relative z-11 w-full md:w-[180px]">
-                          <SelectValue placeholder={t("needhelp.choose_category")} />
+                          {loadingCategories && categories.length === 0 ? (
+                            <span className="flex items-center gap-2 text-muted-foreground">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              {t("needhelp.loading_categories")}
+                            </span>
+                          ) : (
+                            <SelectValue placeholder={t("needhelp.choose_category")} />
+                          )}
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {translatedCategories.map((category, index) => (
-                          <SelectItem key={index} value={categories[index]}>
-                            {category}
+                        {categories.map((category, index) => (
+                          <SelectItem key={category} value={category}>
+                            {translatedCategories[index] ?? category}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
+                    {loadingCategories && categories.length === 0 && (
+                      <p className="text-sm text-muted-foreground">
+                        {t("needhelp.connecting_server")}
+                      </p>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -371,7 +400,11 @@ export default function NeedHelp() {
                 )}
               />
 
-              <Button type="submit" className="w-full md:w-auto" disabled={loading}>
+              <Button
+                type="submit"
+                className="w-full md:w-auto"
+                disabled={loading || loadingCategories || !chosenCategory}
+              >
                 {loading && !loadingMore ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
