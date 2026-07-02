@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import axiosInstance from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
@@ -12,29 +12,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form";
 import MapComponent from "@/components/MapComponent";
+import OrgContactActions from "@/components/OrgContactActions";
 import { ArrowLeft } from "lucide-react";
-import { translateText } from "../translateText"; // Import translation function
+import { translateText } from "../translateText";
 
-// Pocket Fire / Flagstaff–Sedona default search area
 const DEFAULT_ZIP = "86001";
+const PAGE_STEP = 10;
+const MAX_PAGE_SIZE = 500;
 
-function websiteHref(url) {
-  if (!url) return null;
-  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
-}
-
-function phoneTelHref(phone) {
-  const digits = phone.replace(/[^\d+]/g, "");
-  return digits ? `tel:${digits}` : null;
-}
-
-/** Org card: address, contact, hours, then resource subcategories (matches /by-zip fields). */
+/** Org card: address, contact buttons, hours, then resource subcategories. */
 function ResourceCard({ resource, showDistance, t }) {
-  const phone = resource.Org_PhoneNumber?.trim();
-  const website = resource.Org_URL?.trim();
   const hours = resource.Org_Hours?.trim();
-  const href = website ? websiteHref(website) : null;
-  const tel = phone ? phoneTelHref(phone) : null;
 
   return (
     <Card className="shadow-md">
@@ -46,38 +34,18 @@ function ResourceCard({ resource, showDistance, t }) {
             <CardDescription>{resource.Org_FullAddress}</CardDescription>
           </div>
           {showDistance && resource.distance != null && (
-            <span className="font-bold text-blue-500">
-              {resource.distance.toFixed(1)} miles
+            <span className="font-bold text-blue-500 whitespace-nowrap">
+              {resource.distance.toFixed(1)} {t("needhelp.miles")}
             </span>
           )}
         </div>
       </CardHeader>
-      <CardContent className="text-left space-y-2">
-        {(phone || website) && (
-          <div className="text-sm text-muted-foreground space-y-1">
-            {phone && tel && (
-              <p>
-                <b>{t("needhelp.phone")}:</b>{" "}
-                <a href={tel} className="text-primary hover:underline">
-                  {phone}
-                </a>
-              </p>
-            )}
-            {website && href && (
-              <p>
-                <b>{t("needhelp.website")}:</b>{" "}
-                <a
-                  href={href}
-                  className="text-primary hover:underline break-all"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {website}
-                </a>
-              </p>
-            )}
-          </div>
-        )}
+      <CardContent className="text-left space-y-3">
+        <OrgContactActions
+          phone={resource.Org_PhoneNumber}
+          website={resource.Org_URL}
+          t={t}
+        />
         {hours && (
           <p>
             <b>{t("needhelp.hours")}:</b> {hours}
@@ -99,53 +67,101 @@ export default function NeedHelp() {
   const [zipCode, setZipCode] = useState(DEFAULT_ZIP);
   const [chosenCategory, setChosenCategory] = useState("");
   const [resources, setResources] = useState([]);
+  const [pageSize, setPageSize] = useState(PAGE_STEP);
+  const [loading, setLoading] = useState(false);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  // Categories from API (dev.category — AZ orgs with mappable addresses)
+  const mapLabels = useMemo(
+    () => ({
+      phone: t("needhelp.phone"),
+      website: t("needhelp.website"),
+      hours: t("needhelp.hours"),
+      providing: t("needhelp.providing"),
+      miles: t("needhelp.miles"),
+      distance: t("needhelp.distance"),
+      callPhone: t("needhelp.call_phone"),
+      visitWebsite: t("needhelp.visit_website"),
+      providingUnknown: t("needhelp.providing_unknown"),
+      unknownName: t("needhelp.unknown_name"),
+      unknownAddress: t("needhelp.unknown_address"),
+    }),
+    [t, i18n.language]
+  );
+
+  const fetchResources = useCallback(
+    async (size) => {
+      if (!chosenCategory) return;
+      setLoading(true);
+      try {
+        const zip = zipCode.trim() || DEFAULT_ZIP;
+        const response = await axiosInstance.get(
+          `/resources/need-help/by-zip?category=${encodeURIComponent(chosenCategory)}&zipcode=${encodeURIComponent(zip)}&pagesize=${size}`
+        );
+        setResources(response.data.resources);
+        setPageSize(size);
+      } catch (error) {
+        console.error("Error fetching resources:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [chosenCategory, zipCode]
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axiosInstance.get("/resources/need-help-categories");
         setCategories(data);
-
-        // Pre-select first category
         if (data.length > 0) {
-          setChosenCategory(data[0]); 
+          setChosenCategory(data[0]);
         }
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
       }
     };
-
     fetchData();
   }, []);
 
-  // Fetch resources automatically when category is set
   useEffect(() => {
-    if (chosenCategory) {
-      getResources();
-    }
+    if (!chosenCategory) return;
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      try {
+        const zip = zipCode.trim() || DEFAULT_ZIP;
+        const response = await axiosInstance.get(
+          `/resources/need-help/by-zip?category=${encodeURIComponent(chosenCategory)}&zipcode=${encodeURIComponent(zip)}&pagesize=${PAGE_STEP}`
+        );
+        if (!cancelled) {
+          setResources(response.data.resources);
+          setPageSize(PAGE_STEP);
+        }
+      } catch (error) {
+        console.error("Error fetching resources:", error);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // Refetch only when category changes; ZIP search uses the Search button.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosenCategory]);
 
-  // Translate categories when language changes
   useEffect(() => {
     const translateCategories = async () => {
       if (categories.length === 0) return;
-
       const translated = await Promise.all(
-        categories.map(async (category) => {
-          return await translateText(category, i18n.language.toUpperCase());
-        })
+        categories.map((category) => translateText(category, i18n.language.toUpperCase()))
       );
-
       setTranslatedCategories(translated);
     };
-
     translateCategories();
   }, [categories, i18n.language]);
 
-  // Form validation schema
   const formSchema = z.object({
     category: z.string().min(1, { message: "Please select a category" }),
     zipCode: z.string()
@@ -163,17 +179,10 @@ export default function NeedHelp() {
     },
   });
 
-  // Fetch resources based on category and zip code
-  const getResources = async () => {
-    try {
-      const response = await axiosInstance.get(
-        `/resources/need-help/by-zip?category=${chosenCategory}&zipcode=${zipCode}`
-      );
-      setResources(response.data.resources);
-    } catch (error) {
-      console.error("Error fetching resources:", error);
-    }
-  };
+  const onSearch = () => fetchResources(PAGE_STEP);
+  const onLoadMore = () => fetchResources(Math.min(pageSize + PAGE_STEP, MAX_PAGE_SIZE));
+  const showDistance = Boolean(zipCode?.trim());
+  const hasMore = resources.length >= pageSize && pageSize < MAX_PAGE_SIZE;
 
   return (
     <>
@@ -186,27 +195,12 @@ export default function NeedHelp() {
         <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
       </Button>
       <div className="p-4 container max-w-screen-xl m-auto">
-        {/* Information Section */}
-        {/* <p className="text-muted-foreground mt-2 mb-4 text-sm md:text-base">
-          {t("needhelp.this_search_draws")}{" "}
-          <a
-            href="https://docs.google.com/spreadsheets/u/1/d/1KMk34XY5dsvVJjAoD2mQUVHYU_Ib6COz6jcGH5uJWDY/htmlview#"
-            className="text-primary hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t("needhelp.MALAN_resources_table")}
-          </a>
-        </p> */}
-
-        {/* Form Section */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(getResources)}
+              onSubmit={form.handleSubmit(onSearch)}
               className="flex flex-col md:flex-row gap-4 w-full items-unset lg:items-end"
             >
-              {/* Help Category */}
               <FormField
                 control={form.control}
                 name="category"
@@ -238,7 +232,6 @@ export default function NeedHelp() {
                 )}
               />
 
-              {/* ZIP Code */}
               <FormField
                 control={form.control}
                 name="zipCode"
@@ -260,60 +253,63 @@ export default function NeedHelp() {
                 )}
               />
 
-              {/* Search Button */}
-              <Button type="submit" className="w-full md:w-auto">
+              <Button type="submit" className="w-full md:w-auto" disabled={loading}>
                 {t("needhelp.search")}
               </Button>
             </form>
           </Form>
         </div>
 
-  <div className="container max-w-screen-xl mx-auto">
-  {/* Two-column layout (Map on Right, Resources on Left) */}
-  <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6">
-    {/* Resources Column (1fr) */}
-    <div className="space-y-4">
-      {/* Makes use of the 'optional chaining' operator [?.] to safely check if 'resources' is null or undefined. This prevents errors that would otherwise occur when attempting to access properties or call methods on non-existent values */}
-      {/* When using ?. in a property access or method call, the expression will short-circuit and return 'undefined', if the value to the left of '?.' is null or undefined.  This avoids throwing a TypeError */}
-      {resources?.length === 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("needhelp.no_results")}</CardTitle>
-            <CardDescription>{t("needhelp.no_resources_found")}</CardDescription>
-          </CardHeader>
-        </Card>
-      ) : (
-        resources.slice(0, 3).map((resource) => (
-          <ResourceCard
-            key={resource.Org_Id ?? resource.Org_Name}
-            resource={resource}
-            showDistance={Boolean(zipCode)}
-            t={t}
-          />
-        ))
-      )}
-    </div>
+        <div className="container max-w-screen-xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6">
+            <div className="space-y-4">
+              {resources?.length === 0 && !loading ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{t("needhelp.no_results")}</CardTitle>
+                    <CardDescription>{t("needhelp.no_resources_found")}</CardDescription>
+                  </CardHeader>
+                </Card>
+              ) : (
+                resources.slice(0, 3).map((resource) => (
+                  <ResourceCard
+                    key={resource.Org_Id ?? resource.Org_Name}
+                    resource={resource}
+                    showDistance={showDistance}
+                    t={t}
+                  />
+                ))
+              )}
+            </div>
 
-    {/* Map Column (2fr) */}
-    <div className="relative z-10 w-full h-[300px] md:h-[400px] lg:h-[500px]">
-      <MapComponent resources={resources} />
-    </div>
-</div>
+            <div className="relative z-10 w-full h-[300px] md:h-[400px] lg:h-[500px]">
+              <MapComponent
+                resources={resources}
+                mapLabels={mapLabels}
+                showDistance={showDistance}
+              />
+            </div>
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+            {resources.slice(3).map((resource) => (
+              <ResourceCard
+                key={resource.Org_Id ?? resource.Org_Name}
+                resource={resource}
+                showDistance={showDistance}
+                t={t}
+              />
+            ))}
+          </div>
 
-  {/* Full-Width Resource Grid After Map Finishes */}
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-    {resources.slice(3).map((resource) => (
-      <ResourceCard
-        key={resource.Org_Id ?? resource.Org_Name}
-        resource={resource}
-        showDistance={Boolean(zipCode)}
-        t={t}
-      />
-    ))}
-  </div>
-</div>
-
+          {hasMore && (
+            <div className="flex justify-center mt-8">
+              <Button variant="outline" onClick={onLoadMore} disabled={loading}>
+                {t("needhelp.load_more")}
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
