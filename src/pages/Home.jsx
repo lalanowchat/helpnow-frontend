@@ -1,12 +1,17 @@
-import React from 'react';
+import { useEffect } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import logo from '../assets/HelpNow-logo.svg'
 import heart from '../assets/donate-heart.svg'
+import { prefetchBackendForNeedHelp } from '@/lib/needHelpCategories';
 
 export default function Home() {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    prefetchBackendForNeedHelp();
+  }, []);
   return (
     <>
       <Header title="HelpNow Inc" />
