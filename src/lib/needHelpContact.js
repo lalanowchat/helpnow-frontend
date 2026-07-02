@@ -13,6 +13,14 @@ export function formatProviding(providing, translatedBySubcategory, language) {
     .join(", ");
 }
 
+/** Org hours string from the API; translated when locale is not English. */
+export function formatHours(hours, translatedByHours, language) {
+  if (!hours?.trim()) return "";
+  const trimmed = hours.trim();
+  if (language.startsWith("en")) return trimmed;
+  return translatedByHours[trimmed] ?? trimmed;
+}
+
 export function websiteHref(url) {
   if (!url) return null;
   return /^https?:\/\//i.test(url) ? url : `https://${url}`;
@@ -38,7 +46,7 @@ const MAP_BTN_STYLE =
 export function buildMapPopupHtml(resource, labels, showDistance) {
   const phone = resource.Org_PhoneNumber?.trim();
   const website = resource.Org_URL?.trim();
-  const hours = resource.Org_Hours?.trim();
+  const hours = (resource.displayHours ?? resource.Org_Hours)?.trim();
   const tel = phone ? phoneTelHref(phone) : null;
   const href = website ? websiteHref(website) : null;
 
