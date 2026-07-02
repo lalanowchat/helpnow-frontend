@@ -27,6 +27,8 @@
       "loading": "Loading results…",
       "loading_categories": "Loading categories…",
       "connecting_server": "Connecting to server, this may take a moment…",
+      "server_retrying": "Server is starting up, retrying…",
+      "server_unreachable": "Could not reach the server. Please try again.",
       "loading_more": "Loading more…",
       "no_more_results": "No more results",
       "providing_unknown": "Providing unknown",

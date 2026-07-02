@@ -33,7 +33,9 @@
     "unknown_name": "名称不明",
     "unknown_address": "住所不明",
     "loading_categories": "カテゴリを読み込み中…",
-    "connecting_server": "サーバーに接続中です。少々お待ちください…"
+    "connecting_server": "サーバーに接続中です。少々お待ちください…",
+    "server_retrying": "サーバーを起動中、再試行しています…",
+    "server_unreachable": "サーバーに接続できません。もう一度お試しください。"
   },
   "chatbot": {
     "get_and_give_help": "カリフォルニア州の山火事中に助けを受け、助けを提供する"

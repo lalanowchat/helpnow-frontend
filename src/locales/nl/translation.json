@@ -33,7 +33,9 @@
     "unknown_name": "Onbekende naam",
     "unknown_address": "Onbekend adres",
     "loading_categories": "Categorieën laden…",
-    "connecting_server": "Verbinden met server, even geduld…"
+    "connecting_server": "Verbinden met server, even geduld…",
+    "server_retrying": "Server start op, opnieuw proberen…",
+    "server_unreachable": "Server niet bereikbaar. Probeer het opnieuw."
   },
   "chatbot": {
     "get_and_give_help": "Krijg en geef hulp tijdens bosbranden in Californië"

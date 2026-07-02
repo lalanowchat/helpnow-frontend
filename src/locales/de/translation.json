@@ -33,7 +33,9 @@
     "unknown_name": "Unbekannter Name",
     "unknown_address": "Unbekannte Adresse",
     "loading_categories": "Kategorien werden geladen…",
-    "connecting_server": "Verbindung zum Server, bitte kurz warten…"
+    "connecting_server": "Verbindung zum Server, bitte kurz warten…",
+    "server_retrying": "Server startet, erneuter Versuch…",
+    "server_unreachable": "Server nicht erreichbar. Bitte erneut versuchen."
   },
   "chatbot": {
     "get_and_give_help": "Hilfe erhalten und geben während der Waldbrände in Kalifornien"

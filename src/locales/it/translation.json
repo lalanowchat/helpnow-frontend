@@ -33,7 +33,9 @@
     "unknown_name": "Nome sconosciuto",
     "unknown_address": "Indirizzo sconosciuto",
     "loading_categories": "Caricamento categorie…",
-    "connecting_server": "Connessione al server, potrebbe richiedere un momento…"
+    "connecting_server": "Connessione al server, potrebbe richiedere un momento…",
+    "server_retrying": "Avvio del server, nuovo tentativo…",
+    "server_unreachable": "Impossibile raggiungere il server. Riprova."
   },
   "chatbot": {
     "get_and_give_help": "Ricevi e offri aiuto durante gli incendi in California"

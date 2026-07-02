@@ -33,7 +33,9 @@
     "unknown_name": "名称未知",
     "unknown_address": "地址未知",
     "loading_categories": "正在加载类别…",
-    "connecting_server": "正在连接服务器，可能需要一点时间…"
+    "connecting_server": "正在连接服务器，可能需要一点时间…",
+    "server_retrying": "服务器正在启动，正在重试…",
+    "server_unreachable": "无法连接服务器，请重试。"
   },
   "chatbot": {
     "get_and_give_help": "在加州野火期间获得和提供帮助"

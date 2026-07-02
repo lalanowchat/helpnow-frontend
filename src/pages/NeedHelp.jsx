@@ -21,6 +21,7 @@ import {
   refreshNeedHelpCategories,
   readCachedNeedHelpCategories,
 } from "@/lib/needHelpCategories";
+import { subscribeApiRetry } from "@/lib/apiRetryStatus";
 
 const DEFAULT_ZIP = "86001";
 const PAGE_STEP = 10;
@@ -98,12 +99,17 @@ export default function NeedHelp() {
   const [selectedOrgId, setSelectedOrgId] = useState(null);
   const [translatedSubcategories, setTranslatedSubcategories] = useState({});
   const [translatedHours, setTranslatedHours] = useState({});
+  const [apiRetryAttempt, setApiRetryAttempt] = useState(0);
+  const [categoriesError, setCategoriesError] = useState(false);
   const cardRefs = useRef({});
   const resourcesRef = useRef(resources);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   resourcesRef.current = resources;
+
+  const serverWaitMessage =
+    apiRetryAttempt > 0 ? t("needhelp.server_retrying") : t("needhelp.connecting_server");
 
   const mapLabels = useMemo(
     () => ({
@@ -177,6 +183,7 @@ export default function NeedHelp() {
     let cancelled = false;
     (async () => {
       if (!initialCachedCategories?.length) setLoadingCategories(true);
+      setCategoriesError(false);
       try {
         const data = await refreshNeedHelpCategories();
         if (cancelled || !data?.length) return;
@@ -184,6 +191,7 @@ export default function NeedHelp() {
         setChosenCategory((prev) => (prev && data.includes(prev) ? prev : data[0]));
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
+        if (!cancelled && !initialCachedCategories?.length) setCategoriesError(true);
       } finally {
         if (!cancelled) setLoadingCategories(false);
       }
@@ -193,6 +201,8 @@ export default function NeedHelp() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => subscribeApiRetry(setApiRetryAttempt), []);
 
   useEffect(() => {
     if (!chosenCategory) return;
@@ -301,7 +311,7 @@ export default function NeedHelp() {
       return (
         <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
           <Loader2 className="h-8 w-8 animate-spin" />
-          <p>{t("needhelp.loading")}</p>
+          <p>{apiRetryAttempt > 0 ? t("needhelp.server_retrying") : t("needhelp.loading")}</p>
         </div>
       );
     }
@@ -371,7 +381,9 @@ export default function NeedHelp() {
                     </Select>
                     {loadingCategories && categories.length === 0 && (
                       <p className="text-sm text-muted-foreground">
-                        {t("needhelp.connecting_server")}
+                        {categoriesError
+                          ? t("needhelp.server_unreachable")
+                          : serverWaitMessage}
                       </p>
                     )}
                     <FormMessage />

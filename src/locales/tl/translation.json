@@ -33,7 +33,9 @@
     "unknown_name": "Hindi kilalang pangalan",
     "unknown_address": "Hindi kilalang address",
     "loading_categories": "Naglo-load ng mga kategorya…",
-    "connecting_server": "Kumokonekta sa server, maaaring tumagal sandali…"
+    "connecting_server": "Kumokonekta sa server, maaaring tumagal sandali…",
+    "server_retrying": "Nagsisimula ang server, sinusubukang muli…",
+    "server_unreachable": "Hindi maabot ang server. Pakisubukang muli."
   },
   "chatbot": {
     "get_and_give_help": "Humingi at magbigay ng tulong sa panahon ng California Wildfires"

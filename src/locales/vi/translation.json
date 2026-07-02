@@ -33,7 +33,9 @@
     "unknown_name": "Tên không rõ",
     "unknown_address": "Địa chỉ không rõ",
     "loading_categories": "Đang tải danh mục…",
-    "connecting_server": "Đang kết nối máy chủ, vui lòng đợi…"
+    "connecting_server": "Đang kết nối máy chủ, vui lòng đợi…",
+    "server_retrying": "Máy chủ đang khởi động, đang thử lại…",
+    "server_unreachable": "Không thể kết nối máy chủ. Vui lòng thử lại."
   },
   "chatbot": {
     "get_and_give_help": "Nhận và cung cấp trợ giúp trong thời gian cháy rừng tại California"
