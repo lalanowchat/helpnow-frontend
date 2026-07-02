@@ -11,7 +11,7 @@ export default function OrgContactActions({ phone, website, t }) {
   if (!tel && !href) return null;
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2" onClick={(e) => e.stopPropagation()}>
       {trimmedPhone && tel && (
         <Button variant="outline" size="sm" asChild>
           <a href={tel}>
