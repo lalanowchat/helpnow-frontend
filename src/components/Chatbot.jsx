@@ -43,7 +43,7 @@ const Chatbot = () => {
     const selectedLanguage = i18n.language || "en"; // Get the current language
 
     window.voiceflow.chat.load({
-      verify: { projectID: "679c7fb6bd1bdcb515e7dafd" },
+      verify: { projectID: "6a4698c8d8450071a9ae6793" },
       url: "https://general-runtime.voiceflow.com",
       versionID: "production",
       assistant: {
