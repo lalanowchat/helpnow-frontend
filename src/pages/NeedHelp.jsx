@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import PropTypes from "prop-types";
 import axiosInstance from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
@@ -13,6 +14,7 @@ import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form";
 import MapComponent from "@/components/MapComponent";
 import OrgContactActions from "@/components/OrgContactActions";
+import StateSelector, { STATES } from "@/components/StateSelector";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { translateText } from "../translateText";
 import { cn } from "@/lib/utils";
@@ -80,6 +82,26 @@ function ResourceCard({ resource, showDistance, t, isSelected, onSelect, cardRef
   );
 }
 
+ResourceCard.propTypes = {
+  resource: PropTypes.shape({
+    Org_Id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    Org_Name: PropTypes.string,
+    Org_FullAddress: PropTypes.string,
+    Org_PhoneNumber: PropTypes.string,
+    Org_URL: PropTypes.string,
+    Org_Hours: PropTypes.string,
+    providing: PropTypes.string,
+    distance: PropTypes.number,
+    displayProviding: PropTypes.string,
+    displayHours: PropTypes.string,
+  }).isRequired,
+  showDistance: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onSelect: PropTypes.func,
+  cardRef: PropTypes.func,
+};
+
 export default function NeedHelp() {
   // Show categories immediately when Home prefetch (or a prior visit) filled sessionStorage.
   const initialCachedCategories = readCachedNeedHelpCategories();
@@ -103,6 +125,9 @@ export default function NeedHelp() {
   // Mirrors axios GET retry count so we can show "server starting" vs first connect.
   const [apiRetryAttempt, setApiRetryAttempt] = useState(0);
   const [categoriesError, setCategoriesError] = useState(false);
+  const [selectedState, setSelectedState] = useState(null);
+  const [showStateModal, setShowStateModal] = useState(true);
+  const [pendingState, setPendingState] = useState("AZ-SEDONA");
   const cardRefs = useRef({});
   const resourcesRef = useRef(resources);
   const { t, i18n } = useTranslation();
@@ -145,7 +170,7 @@ export default function NeedHelp() {
   );
 
   const fetchResources = useCallback(
-    async (size, { mode = "replace" } = {}) => {
+    async (size, { mode = "replace", zip: zipOverride } = {}) => {
       if (!chosenCategory) return;
       const isLoadMore = mode === "loadMore";
       if (isLoadMore) setLoadingMore(true);
@@ -153,7 +178,7 @@ export default function NeedHelp() {
 
       const prevLen = resourcesRef.current.length;
       try {
-        const zip = zipCode.trim() || DEFAULT_ZIP;
+        const zip = zipOverride ?? (zipCode.trim() || DEFAULT_ZIP);
         const response = await axiosInstance.get(
           `/resources/need-help/by-zip?category=${encodeURIComponent(chosenCategory)}&zipcode=${encodeURIComponent(zip)}&pagesize=${size}`
         );
@@ -335,13 +360,32 @@ export default function NeedHelp() {
   return (
     <>
       <Header title={`HelpNow > ${t("needhelp.need_help")}`} />
-      <Button
-        variant="ghost"
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 px-10 ml-6 mt-3"
-      >
-        <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
-      </Button>
+      <div className="flex items-center justify-between px-10 ml-6 mt-3 pr-10">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 px-0"
+        >
+          <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
+        </Button>
+        <StateSelector
+          description="Choose the state you want to find resources in."
+          showModal={showStateModal}
+          pendingState={pendingState}
+          onPendingChange={setPendingState}
+          onConfirm={() => {
+            const state = STATES.find((s) => s.value === pendingState);
+            setSelectedState(pendingState);
+            setZipCode(state.zipCode);
+            form.setValue("zipCode", state.zipCode, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+            setShowStateModal(false);
+            resetResultsState();
+            fetchResources(PAGE_STEP, { mode: "replace", zip: state.zipCode });
+          }}
+          selectedState={selectedState}
+          onChangeState={() => setShowStateModal(true)}
+        />
+      </div>
       <div className="p-4 container max-w-screen-xl m-auto">
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <Form {...form}>
@@ -447,6 +491,7 @@ export default function NeedHelp() {
                 showDistance={showDistance}
                 selectedOrgId={selectedOrgId}
                 onSelectOrg={setSelectedOrgId}
+                center={STATES.find((s) => s.value === selectedState)?.center}
               />
             </div>
           </div>

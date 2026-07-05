@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form";
 import MapComponent from "@/components/MapComponent";
+import StateSelector, { STATES } from "@/components/StateSelector";
 import { ArrowLeft } from "lucide-react";
 import { translateText } from "../translateText"; // Import translation function
 
@@ -22,6 +23,9 @@ export default function WantToHelp() {
   const [zipCode, setZipCode] = useState("");
   const [chosenCategory, setChosenCategory] = useState("");
   const [resources, setResources] = useState([]);
+  const [selectedState, setSelectedState] = useState(null);
+  const [showStateModal, setShowStateModal] = useState(true);
+  const [pendingState, setPendingState] = useState("AZ-SEDONA");
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -103,27 +107,32 @@ export default function WantToHelp() {
   return (
     <>
       <Header title={`HelpNow > I Want To Help`} />
-      <Button
-        variant="ghost"
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 px-10 ml-6 mt-3"
-      >
-        <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
-      </Button>
+      <div className="flex items-center justify-between px-10 ml-6 mt-3 pr-10">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 px-0"
+        >
+          <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
+        </Button>
+        <StateSelector
+          description="Choose the state you want to find volunteer opportunities in."
+          showModal={showStateModal}
+          pendingState={pendingState}
+          onPendingChange={setPendingState}
+          onConfirm={() => {
+            const state = STATES.find((s) => s.value === pendingState);
+            setSelectedState(pendingState);
+            setZipCode(state.zipCode);
+            form.setValue("zipCode", state.zipCode, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+            setShowStateModal(false);
+            getResources();
+          }}
+          selectedState={selectedState}
+          onChangeState={() => setShowStateModal(true)}
+        />
+      </div>
       <div className="p-4 container max-w-screen-xl m-auto">
-        {/* Information Section */}
-        <p className="text-muted-foreground mt-2 mb-4 text-sm md:text-base">
-          {t("needhelp.this_search_draws")}{" "}
-          <a
-            href="https://docs.google.com/spreadsheets/u/1/d/1KMk34XY5dsvVJjAoD2mQUVHYU_Ib6COz6jcGH5uJWDY/htmlview#"
-            className="text-primary hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t("needhelp.MALAN_resources_table")}
-          </a>
-        </p>
-
         {/* Form Section */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <Form {...form}>
@@ -199,7 +208,7 @@ export default function WantToHelp() {
             {/* Resources Column (1fr) */}
             <div className="space-y-4">
               {resources?.length === 0 ? (
-        <Card>
+                <Card>
                   <CardHeader>
                     <CardTitle>{t("needhelp.no_results")}</CardTitle>
                     <CardDescription>{t("needhelp.no_resources_found")}</CardDescription>
@@ -231,7 +240,7 @@ export default function WantToHelp() {
 
             {/* Map Column (2fr) */}
             <div className="relative z-10 w-full h-[300px] md:h-[400px] lg:h-[500px]">
-              <MapComponent resources={resources} />
+              <MapComponent resources={resources} center={STATES.find((s) => s.value === selectedState)?.center} />
             </div>
           </div>
 
