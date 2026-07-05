@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { buildMapPopupHtml } from '@/lib/needHelpContact';
@@ -24,7 +25,7 @@ function orgKey(resource) {
   return resource.Org_Id ?? resource.Org_Name;
 }
 
-const MapComponent = ({ resources, mapLabels, showDistance, selectedOrgId, onSelectOrg }) => {
+const MapComponent = ({ resources, mapLabels, showDistance, selectedOrgId, onSelectOrg, center }) => {
   const mapRef = useRef(null);
   const markersLayerGroupRef = useRef(null);
   const markersByIdRef = useRef({});
@@ -80,6 +81,12 @@ const MapComponent = ({ resources, mapLabels, showDistance, selectedOrgId, onSel
     }
   }, [resources, mapLabels, showDistance]);
 
+  // Re-center map when selected state changes
+  useEffect(() => {
+    if (!mapRef.current || !center) return;
+    mapRef.current.setView(center, DEFAULT_MAP_ZOOM, { animate: true });
+  }, [center]);
+
   // Open popup when user selects a card
   useEffect(() => {
     if (!selectedOrgId || !mapRef.current) return;
@@ -90,6 +97,15 @@ const MapComponent = ({ resources, mapLabels, showDistance, selectedOrgId, onSel
   }, [selectedOrgId]);
 
   return <div id="map" style={{ height: '500px', width: '100%' }} />;
+};
+
+MapComponent.propTypes = {
+  resources: PropTypes.array.isRequired,
+  mapLabels: PropTypes.object,
+  showDistance: PropTypes.bool,
+  selectedOrgId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onSelectOrg: PropTypes.func,
+  center: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default MapComponent;

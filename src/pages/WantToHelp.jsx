@@ -16,12 +16,21 @@ import MapComponent from "@/components/MapComponent";
 import { ArrowLeft } from "lucide-react";
 import { translateText } from "../translateText"; // Import translation function
 
+const STATES = [
+  { value: "AZ", label: "Arizona", zipCode: "85001", center: [33.45, -112.07] },
+  { value: "UT", label: "Utah", zipCode: "84101", center: [40.76, -111.89] },
+  { value: "CO", label: "Colorado", zipCode: "80201", center: [39.74, -104.98] },
+];
+
 export default function WantToHelp() {
   const [categories, setCategories] = useState([]);
   const [translatedCategories, setTranslatedCategories] = useState([]);
   const [zipCode, setZipCode] = useState("");
   const [chosenCategory, setChosenCategory] = useState("");
   const [resources, setResources] = useState([]);
+  const [selectedState, setSelectedState] = useState(null);
+  const [showStateModal, setShowStateModal] = useState(true);
+  const [pendingState, setPendingState] = useState("AZ");
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -102,28 +111,68 @@ export default function WantToHelp() {
 
   return (
     <>
-      <Header title={`HelpNow > I Want To Help`} />
-      <Button
-        variant="ghost"
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 px-10 ml-6 mt-3"
-      >
-        <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
-      </Button>
-      <div className="p-4 container max-w-screen-xl m-auto">
-        {/* Information Section */}
-        <p className="text-muted-foreground mt-2 mb-4 text-sm md:text-base">
-          {t("needhelp.this_search_draws")}{" "}
-          <a
-            href="https://docs.google.com/spreadsheets/u/1/d/1KMk34XY5dsvVJjAoD2mQUVHYU_Ib6COz6jcGH5uJWDY/htmlview#"
-            className="text-primary hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t("needhelp.MALAN_resources_table")}
-          </a>
-        </p>
+      {/* State Selection Modal */}
+      {showStateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm mx-4 flex flex-col gap-5">
+            <h2 className="text-xl font-semibold text-center">Select Your State</h2>
+            <p className="text-sm text-muted-foreground text-center">
+              Choose the state you want to find volunteer opportunities in.
+            </p>
+            <Select value={pendingState} onValueChange={setPendingState}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a state" />
+              </SelectTrigger>
+              <SelectContent>
+                {STATES.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              className="w-full"
+              onClick={() => {
+                const state = STATES.find((s) => s.value === pendingState);
+                setSelectedState(pendingState);
+                setZipCode(state.zipCode);
+                form.setValue("zipCode", state.zipCode, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+                setShowStateModal(false);
+                getResources();
+              }}
+            >
+              Continue
+            </Button>
+          </div>
+        </div>
+      )}
 
+      <Header title={`HelpNow > I Want To Help`} />
+      <div className="flex items-center justify-between px-10 ml-6 mt-3 pr-10">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 px-0"
+        >
+          <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
+        </Button>
+        {selectedState && (
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted-foreground">
+              State: <span className="font-semibold text-foreground">{STATES.find((s) => s.value === selectedState)?.label}</span>
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowStateModal(true)}
+            >
+              Change State
+            </Button>
+          </div>
+        )}
+      </div>
+      <div className="p-4 container max-w-screen-xl m-auto">
         {/* Form Section */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <Form {...form}>
@@ -199,7 +248,7 @@ export default function WantToHelp() {
             {/* Resources Column (1fr) */}
             <div className="space-y-4">
               {resources?.length === 0 ? (
-        <Card>
+                <Card>
                   <CardHeader>
                     <CardTitle>{t("needhelp.no_results")}</CardTitle>
                     <CardDescription>{t("needhelp.no_resources_found")}</CardDescription>
@@ -231,7 +280,7 @@ export default function WantToHelp() {
 
             {/* Map Column (2fr) */}
             <div className="relative z-10 w-full h-[300px] md:h-[400px] lg:h-[500px]">
-              <MapComponent resources={resources} />
+              <MapComponent resources={resources} center={STATES.find((s) => s.value === selectedState)?.center} />
             </div>
           </div>
 
