@@ -14,7 +14,7 @@ import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form";
 import MapComponent from "@/components/MapComponent";
 import OrgContactActions from "@/components/OrgContactActions";
-import StateSelector from "@/components/StateSelector";
+import StateSelector, { STATES } from "@/components/StateSelector";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { translateText } from "../translateText";
 import { cn } from "@/lib/utils";
@@ -24,12 +24,6 @@ import {
   readCachedNeedHelpCategories,
 } from "@/lib/needHelpCategories";
 import { subscribeApiRetry } from "@/lib/apiRetryStatus";
-
-const STATES = [
-  { value: "AZ", label: "Arizona", zipCode: "85001", center: [33.45, -112.07] },
-  { value: "UT", label: "Utah", zipCode: "84101", center: [40.76, -111.89] },
-  { value: "CO", label: "Colorado", zipCode: "80201", center: [39.74, -104.98] },
-];
 
 const DEFAULT_ZIP = "86001";
 const PAGE_STEP = 10;
@@ -375,7 +369,6 @@ export default function NeedHelp() {
           <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
         </Button>
         <StateSelector
-          states={STATES}
           description="Choose the state you want to find resources in."
           showModal={showStateModal}
           pendingState={pendingState}

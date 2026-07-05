@@ -2,8 +2,14 @@ import PropTypes from "prop-types";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
+export const STATES = [
+  { value: "AZ", label: "Sedona, Arizona", zipCode: "86336", center: [34.8697, -111.7610] },
+  { value: "UT-BEAVER", label: "Beaver County, Utah", zipCode: "84713", center: [38.2766, -112.6412] },
+  { value: "UT-SANJUAN", label: "San Juan County, Utah", zipCode: "84511", center: [37.6264, -109.4784] },
+  { value: "CO", label: "Aspen, Colorado", zipCode: "81611", center: [39.1911, -106.8175] },
+];
+
 const StateSelector = ({
-  states,
   description,
   showModal,
   pendingState,
@@ -25,7 +31,7 @@ const StateSelector = ({
                 <SelectValue placeholder="Select a state" />
               </SelectTrigger>
               <SelectContent>
-                {states.map((s) => (
+                {STATES.map((s) => (
                   <SelectItem key={s.value} value={s.value}>
                     {s.label}
                   </SelectItem>
@@ -45,7 +51,7 @@ const StateSelector = ({
           <span className="text-sm text-muted-foreground">
             State:{" "}
             <span className="font-semibold text-foreground">
-              {states.find((s) => s.value === selectedState)?.label}
+              {STATES.find((s) => s.value === selectedState)?.label}
             </span>
           </span>
           <Button variant="outline" size="sm" onClick={onChangeState}>
@@ -58,14 +64,6 @@ const StateSelector = ({
 };
 
 StateSelector.propTypes = {
-  states: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      zipCode: PropTypes.string.isRequired,
-      center: PropTypes.arrayOf(PropTypes.number).isRequired,
-    })
-  ).isRequired,
   description: PropTypes.string.isRequired,
   showModal: PropTypes.bool,
   pendingState: PropTypes.string.isRequired,
