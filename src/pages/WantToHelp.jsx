@@ -25,7 +25,7 @@ export default function WantToHelp() {
   const [resources, setResources] = useState([]);
   const [selectedState, setSelectedState] = useState(null);
   const [showStateModal, setShowStateModal] = useState(true);
-  const [pendingState, setPendingState] = useState("AZ");
+  const [pendingState, setPendingState] = useState("AZ-SEDONA");
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 

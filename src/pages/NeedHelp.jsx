@@ -127,7 +127,7 @@ export default function NeedHelp() {
   const [categoriesError, setCategoriesError] = useState(false);
   const [selectedState, setSelectedState] = useState(null);
   const [showStateModal, setShowStateModal] = useState(true);
-  const [pendingState, setPendingState] = useState("AZ");
+  const [pendingState, setPendingState] = useState("AZ-SEDONA");
   const cardRefs = useRef({});
   const resourcesRef = useRef(resources);
   const { t, i18n } = useTranslation();

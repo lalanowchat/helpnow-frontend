@@ -3,7 +3,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Button } from "@/components/ui/button";
 
 export const STATES = [
-  { value: "AZ", label: "Sedona, Arizona", zipCode: "86336", center: [34.8697, -111.7610] },
+  { value: "AZ-SEDONA", label: "Sedona, Arizona", zipCode: "86336", center: [34.8697, -111.7610] },
+  { value: "AZ-FLAGSTAFF", label: "Flagstaff, Arizona", zipCode: "86001", center: [35.1983, -111.6513] },
   { value: "UT-BEAVER", label: "Beaver County, Utah", zipCode: "84713", center: [38.2766, -112.6412] },
   { value: "UT-SANJUAN", label: "San Juan County, Utah", zipCode: "84511", center: [37.6264, -109.4784] },
   { value: "CO", label: "Aspen, Colorado", zipCode: "81611", center: [39.1911, -106.8175] },
