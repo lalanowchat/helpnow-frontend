@@ -14,6 +14,7 @@ import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from "@/components/ui/form";
 import MapComponent from "@/components/MapComponent";
 import OrgContactActions from "@/components/OrgContactActions";
+import StateSelector from "@/components/StateSelector";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { translateText } from "../translateText";
 import { cn } from "@/lib/utils";
@@ -364,44 +365,6 @@ export default function NeedHelp() {
 
   return (
     <>
-      {/* State Selection Modal */}
-      {showStateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm mx-4 flex flex-col gap-5">
-            <h2 className="text-xl font-semibold text-center">Select Your State</h2>
-            <p className="text-sm text-muted-foreground text-center">
-              Choose the state you want to find resources in.
-            </p>
-            <Select value={pendingState} onValueChange={setPendingState}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a state" />
-              </SelectTrigger>
-              <SelectContent>
-                {STATES.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    {s.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button
-              className="w-full"
-              onClick={() => {
-                const state = STATES.find((s) => s.value === pendingState);
-                setSelectedState(pendingState);
-                setZipCode(state.zipCode);
-                form.setValue("zipCode", state.zipCode, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
-                setShowStateModal(false);
-                resetResultsState();
-                fetchResources(PAGE_STEP, { mode: "replace", zip: state.zipCode });
-              }}
-            >
-              Continue
-            </Button>
-          </div>
-        </div>
-      )}
-
       <Header title={`HelpNow > ${t("needhelp.need_help")}`} />
       <div className="flex items-center justify-between px-10 ml-6 mt-3 pr-10">
         <Button
@@ -411,20 +374,24 @@ export default function NeedHelp() {
         >
           <ArrowLeft className="w-4 h-4" />{t("needhelp.Back")}
         </Button>
-        {selectedState && (
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">
-              State: <span className="font-semibold text-foreground">{STATES.find((s) => s.value === selectedState)?.label}</span>
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowStateModal(true)}
-            >
-              Change State
-            </Button>
-          </div>
-        )}
+        <StateSelector
+          states={STATES}
+          description="Choose the state you want to find resources in."
+          showModal={showStateModal}
+          pendingState={pendingState}
+          onPendingChange={setPendingState}
+          onConfirm={() => {
+            const state = STATES.find((s) => s.value === pendingState);
+            setSelectedState(pendingState);
+            setZipCode(state.zipCode);
+            form.setValue("zipCode", state.zipCode, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+            setShowStateModal(false);
+            resetResultsState();
+            fetchResources(PAGE_STEP, { mode: "replace", zip: state.zipCode });
+          }}
+          selectedState={selectedState}
+          onChangeState={() => setShowStateModal(true)}
+        />
       </div>
       <div className="p-4 container max-w-screen-xl m-auto">
         <div className="flex flex-col md:flex-row gap-4 mb-8">
