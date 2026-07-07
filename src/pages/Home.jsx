@@ -1,51 +1,69 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import logo from '../assets/HelpNow-logo.svg'
-import heart from '../assets/donate-heart.svg'
+import MapComponent from '../components/MapComponent';
+import NeedHelpDropdown from '../components/NeedHelpDropdown';
+import WantToHelpDropdown from '../components/WantToHelpDropdown';
 import { prefetchBackendForNeedHelp } from '@/lib/needHelpCategories';
 
 export default function Home() {
-  const { t } = useTranslation();
+  const [resources, setResources] = useState([]);
+  const [selectedOrgId, setSelectedOrgId] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'needHelp' | 'wantToHelp' | null
 
-  // Wake Fly backend and cache Need Help categories before the user opens that page.
+  const closeAll = () => {
+    setActiveDropdown(null);
+    setResources([]);
+    setSelectedOrgId(null);
+  };
+
   useEffect(() => {
     prefetchBackendForNeedHelp();
   }, []);
+
   return (
-    <>
-      <Header title="HelpNow Inc" />
-      <div className="flex flex-col items-center justify-center p-4">
-        {/* Main container */}
-        <img src={logo} alt="Help Now Logo" className="h-80 w-80 py-4" />
-        <div className="flex flex-col md:flex-row w-full max-w-4xl gap-4">
-          {/* Need Help Button */}
-          <Link
-            to="/need-help"
-            className="flex-1 p-4 text-lg md:text-xl bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-center"
-          >
-            {t('header.needHelp')}
-          </Link>
-          {/* Want to Help Button */}
-          <Link
-            to="https://www.keepsedonabeautiful.org/fire/"
-            className="flex-1 p-4 text-lg md:text-xl bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-center"
-          >
-            {t('header.wantToHelp')}
-          </Link>
-        </div>
-        <div className="pt-8">
-          HelpNow provides real-time, verified emergency resources for wildfires, floods, and disasters. Get 24/7 assistance from Lala, our AI-powered digital assistant.
-        </div>
-        <Link
-          to="https://www.zeffy.com/fundraising/donate-to-provide-los-angeles-with-real-time-verified-resources-in-times-of-crisis"
-          className="hover:animate-pulse"
-        >
-          <img src={heart} alt="Donate Heart" className="h-60 w-60 py-4" />
-          <div className="-translate-y-40 text-2xl font-bold text-[#2f4860]">Donate Now</div>
-        </Link>
+    <div className="flex flex-col h-screen">
+      <Header
+        title="HelpNow Inc"
+        onNeedHelp={() => setActiveDropdown('needHelp')}
+        onWantToHelp={() => setActiveDropdown('wantToHelp')}
+        onLogoClick={closeAll}
+        activeDropdown={activeDropdown}
+      />
+      <div className="relative flex-1">
+        <MapComponent
+          resources={resources}
+          mapLabels={{
+            phone: 'Phone',
+            website: 'Website',
+            hours: 'Hours',
+            providing: 'Providing',
+            miles: 'miles',
+            distance: 'Distance',
+            callPhone: 'Call',
+            visitWebsite: 'Visit Website',
+            providingUnknown: 'Unknown',
+            unknownName: 'Unknown',
+            unknownAddress: 'Unknown address',
+          }}
+          showDistance={true}
+          selectedOrgId={selectedOrgId}
+          onSelectOrg={setSelectedOrgId}
+        />
+        {activeDropdown === 'needHelp' && (
+          <NeedHelpDropdown
+            onResults={(r) => { setResources(r); setSelectedOrgId(null); }}
+            onSelectOrg={setSelectedOrgId}
+            selectedOrgId={selectedOrgId}
+          />
+        )}
+        {activeDropdown === 'wantToHelp' && (
+          <WantToHelpDropdown
+            onResults={(r) => { setResources(r); setSelectedOrgId(null); }}
+            onSelectOrg={setSelectedOrgId}
+            selectedOrgId={selectedOrgId}
+          />
+        )}
       </div>
-    </>
+    </div>
   );
 }

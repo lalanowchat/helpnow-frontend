@@ -4,7 +4,7 @@ import { LifeBuoy, HeartHandshake, Heart, MessageCircle } from 'lucide-react';
 import NavButton from './NavButton';
 import logo from '../assets/HelpNow-logo.svg'
 
-export default function Header({ title }) {
+export default function Header({ title, onNeedHelp, onWantToHelp, onLogoClick, activeDropdown }) {
   const navigate = useNavigate();
 
   const openChat = () => {
@@ -18,7 +18,7 @@ export default function Header({ title }) {
       <nav className="flex items-center justify-between h-16 pl-6">
         <button
           type="button"
-          onClick={() => navigate('/')}
+          onClick={() => { navigate('/'); onLogoClick?.(); }}
           className="flex items-center gap-2 text-2xl font-semibold text-black tracking-tight hover:opacity-70 transition-opacity duration-200"
         >
           <img src={logo} alt="Help Now Logo" className="h-12 w-12" />
@@ -29,14 +29,14 @@ export default function Header({ title }) {
           <NavButton
             label="Need Help"
             icon={<LifeBuoy className="w-5 h-5 text-blue-600" />}
-            onClick={() => navigate('/need-help')}
-            className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+            onClick={onNeedHelp}
+            className={activeDropdown === 'needHelp' ? 'text-black bg-gray-100' : 'text-black hover:bg-gray-100 focus-visible:ring-gray-400'}
           />
           <NavButton
             label="Want to Help"
             icon={<Heart className="w-5 h-5 text-emerald-600" />}
-            onClick={() => navigate('/want-to-help')}
-            className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+            onClick={onWantToHelp}
+            className={activeDropdown === 'wantToHelp' ? 'text-black bg-gray-100' : 'text-black hover:bg-gray-100 focus-visible:ring-gray-400'}
           />
           <NavButton
             label="Chat with Lala"

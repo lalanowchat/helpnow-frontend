@@ -89,7 +89,7 @@ const MapComponent = ({ resources, mapLabels, showDistance, selectedOrgId, onSel
     marker.openPopup();
   }, [selectedOrgId]);
 
-  return <div id="map" style={{ height: '500px', width: '100%' }} />;
+  return <div id="map" style={{ height: '100%', width: '100%' }} />;
 };
 
 export default MapComponent;
