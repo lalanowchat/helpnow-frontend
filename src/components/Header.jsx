@@ -93,7 +93,7 @@ export default function Header({ onNeedHelp, onWantToHelp, onLogoClick, activeDr
         <button
           type="button"
           onClick={handleLogoClick}
-          className="flex items-center gap-2 text-sm sm:text-2xl font-bold text-black tracking-tight hover:opacity-70 transition-opacity duration-200"
+          className="flex items-center gap-2 text-2xl font-bold text-black tracking-tight hover:opacity-70 transition-opacity duration-200"
         >
           <div>HelpNow Inc</div>
         </button>

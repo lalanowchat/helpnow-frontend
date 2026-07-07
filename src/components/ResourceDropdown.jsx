@@ -348,7 +348,7 @@ export default function ResourceDropdown({
         {minimized && (
           <button
             onClick={toggleMinimized}
-            className="md:hidden absolute bottom-6 left-4 z-[1000] flex items-center gap-2 px-5 py-2.5 rounded-full shadow-lg bg-white text-gray-800 text-sm font-medium border border-gray-200 transition-colors hover:bg-gray-50"
+            className="md:hidden absolute top-4 right-4 z-[1000] flex items-center gap-2 px-5 py-2.5 rounded-full shadow-lg bg-white text-gray-800 text-sm font-medium border border-gray-200 transition-colors hover:bg-gray-50"
           >
             <Search className="w-4 h-4" />
             {resources.length > 0 ? `${resources.length} Resources` : 'Search Resources'}
