@@ -1,43 +1,137 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { LifeBuoy, HeartHandshake, Heart, MessageCircle, Menu } from 'lucide-react';
+import NavButton from './NavButton';
+import logo from '../assets/HelpNow-logo.svg';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
-export default function Header({ title }) {
-  const { t, i18n } = useTranslation();
+function MobileMenu({ navItems, open, onOpenChange }) {
+  return (
+    <div className="md:hidden">
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        <SheetTrigger asChild>
+          <button
+            type="button"
+            className="flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 transition-colors"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        </SheetTrigger>
+        <SheetContent side="right" className="w-64 pt-8 px-3 flex flex-col gap-1">
+          {navItems}
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
+}
 
-  const handleLanguageChange = (e) => {
-    i18n.changeLanguage(e.target.value);
+export default function Header({ onNeedHelp, onWantToHelp, onLogoClick, activeDropdown, logoHref = '/' }) {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+
+  const openChat = () => {
+    if (window.voiceflow?.chat) {
+      window.voiceflow.chat.open();
+    }
   };
+
+  const handleLogoClick = () => {
+    navigate(logoHref);
+    onLogoClick?.();
+    setDrawerOpen(false);
+  };
+
+  // Wrap nav actions so the drawer closes on mobile after selection
+  const handle = (fn) => () => {
+    fn?.();
+    setDrawerOpen(false);
+  };
+
+  const mobileNavItems = (
+    <>
+      <NavButton
+        inline
+        label="Need Help"
+        icon={<LifeBuoy className="w-5 h-5 text-red-600" />}
+        onClick={handle(onNeedHelp ?? (() => navigate('/need-help')))}
+        className={activeDropdown === 'needHelp' || activeDropdown === null ? 'text-black bg-gray-100' : 'text-black hover:bg-gray-100 focus-visible:ring-gray-400'}
+      />
+      {/* <NavButton
+        inline
+        label="Want to Help"
+        icon={<Heart className="w-5 h-5 text-emerald-600" />}
+        onClick={handle(onWantToHelp ?? (() => navigate('/want-to-help')))}
+        className={activeDropdown === 'wantToHelp' ? 'text-black bg-gray-100' : 'text-black hover:bg-gray-100 focus-visible:ring-gray-400'}
+      /> */}
+      <NavButton
+        inline
+        label="Chat with Lala"
+        icon={<MessageCircle className="w-5 h-5 text-blue-600" />}
+        onClick={handle(openChat)}
+        className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+      />
+      <NavButton
+        inline
+        label="Donate"
+        icon={<HeartHandshake className="w-5 h-5 text-violet-500" />}
+        href="https://www.zeffy.com/fundraising/donate-to-provide-los-angeles-with-real-time-verified-resources-in-times-of-crisis"
+        className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+      />
+    </>
+  );
 
   return (
     <div className="top-0 left-0 right-0 z-20 border-b bg-background/95 backdrop-blur-lg shadow-md">
-      <nav className="flex items-center justify-between h-16 px-6 md:px-16">
-        <div className="text-2xl font-semibold text-black tracking-tight">
-          {title}
+      <nav className="flex items-center justify-between h-16 pl-6 pr-4">
+        {/* Logo */}
+        <button
+          type="button"
+          onClick={handleLogoClick}
+          className="flex items-center gap-2 text-2xl font-bold text-black tracking-tight hover:opacity-70 transition-opacity duration-200"
+        >
+          <div>HelpNow Inc</div>
+        </button>
+
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center">
+          <NavButton
+            label="Need Help"
+            icon={<LifeBuoy className="w-5 h-5 text-red-600" />}
+            onClick={(() => navigate('/need-help'))}
+            className={activeDropdown === 'needHelp' || activeDropdown === null || pathname === '/need-help' ? 'text-black bg-gray-100' : 'text-black hover:bg-gray-100 focus-visible:ring-gray-400'}
+          />
+          {/* <NavButton
+            label="Want to Help"
+            icon={<Heart className="w-5 h-5 text-emerald-600" />}
+            onClick={onWantToHelp ?? (() => navigate('/want-to-help'))}
+            className={activeDropdown === 'wantToHelp' ? 'text-black bg-gray-100' : 'text-black hover:bg-gray-100 focus-visible:ring-gray-400'}
+          /> */}
+          <NavButton
+            label="Chat"
+            icon={<MessageCircle className="w-5 h-5 text-blue-600" />}
+            onClick={openChat}
+            className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+          />
+          <NavButton
+            label="Donate"
+            icon={<HeartHandshake className="w-5 h-5 text-violet-500" />}
+            href="https://www.zeffy.com/fundraising/donate-to-provide-los-angeles-with-real-time-verified-resources-in-times-of-crisis"
+            className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+          />
         </div>
 
-        <div className="relative">
-          <select
-            onChange={handleLanguageChange}
-            className="p-3 rounded-md bg-blue-500 text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-blue-600 transition duration-200 ease-in-out"
-          >
-            <option value="en">English</option>
-            <option value="es">Español</option>
-            <option value="ko">한국어</option>
-            <option value="zh">中文</option>
-            <option value="ja">日本語</option>
-            <option value="ru">Русский</option>
-            <option value="vi">Tiếng Việt</option> 
-            <option value="ar">العربية</option>
-            <option value="fr">Français</option>
-            <option value="hi">हिंदी</option>
-            <option value="it">Italiano</option>
-            <option value="de">Deutsch</option>
-            <option value="nl">Nederlands</option>
-            <option value="tl">Tagalog</option>
-            <option value="hy">Հայերեն</option>
-            <option value="fa">فارسی</option> 
-          </select>
-        </div>
+        {/* Mobile hamburger */}
+        <MobileMenu
+          navItems={mobileNavItems}
+          open={drawerOpen}
+          onOpenChange={setDrawerOpen}
+        />
       </nav>
     </div>
   );
