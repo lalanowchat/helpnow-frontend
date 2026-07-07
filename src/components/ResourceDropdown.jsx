@@ -357,7 +357,8 @@ export default function ResourceDropdown({
         )}
         <SheetContent
           side="bottom"
-          className="md:hidden flex flex-col rounded-t-2xl p-0 h-[70vh]"
+          className="md:hidden flex flex-col rounded-t-2xl p-0 h-[40vh]"
+          overlayClassName="bg-transparent"
         >
           {/* <div className="" /> */}
           <PanelContent {...sharedProps} onSelectOrg={handleSelectOrgMobile} isDesktop={false} />
