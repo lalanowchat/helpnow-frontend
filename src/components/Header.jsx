@@ -1,42 +1,55 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { LifeBuoy, HeartHandshake, Heart, MessageCircle } from 'lucide-react';
+import NavButton from './NavButton';
+import logo from '../assets/HelpNow-logo.svg'
 
 export default function Header({ title }) {
-  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
-  const handleLanguageChange = (e) => {
-    i18n.changeLanguage(e.target.value);
+  const openChat = () => {
+    if (window.voiceflow?.chat) {
+      window.voiceflow.chat.open();
+    }
   };
 
   return (
     <div className="top-0 left-0 right-0 z-20 border-b bg-background/95 backdrop-blur-lg shadow-md">
-      <nav className="flex items-center justify-between h-16 px-6 md:px-16">
-        <div className="text-2xl font-semibold text-black tracking-tight">
-          {title}
-        </div>
+      <nav className="flex items-center justify-between h-16 pl-6">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 text-2xl font-semibold text-black tracking-tight hover:opacity-70 transition-opacity duration-200"
+        >
+          <img src={logo} alt="Help Now Logo" className="h-12 w-12" />
+          <div>HelpNow Inc</div>
+        </button>
 
-        <div className="relative">
-          <select
-            onChange={handleLanguageChange}
-            className="p-3 rounded-md bg-blue-500 text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-blue-600 transition duration-200 ease-in-out"
-          >
-            <option value="en">English</option>
-            <option value="es">Español</option>
-            <option value="ko">한국어</option>
-            <option value="zh">中文</option>
-            <option value="ja">日本語</option>
-            <option value="ru">Русский</option>
-            <option value="vi">Tiếng Việt</option> 
-            <option value="ar">العربية</option>
-            <option value="fr">Français</option>
-            <option value="hi">हिंदी</option>
-            <option value="it">Italiano</option>
-            <option value="de">Deutsch</option>
-            <option value="nl">Nederlands</option>
-            <option value="tl">Tagalog</option>
-            <option value="hy">Հայերեն</option>
-            <option value="fa">فارسی</option> 
-          </select>
+        <div className="flex items-center">
+          <NavButton
+            label="Need Help"
+            icon={<LifeBuoy className="w-5 h-5 text-blue-600" />}
+            onClick={() => navigate('/need-help')}
+            className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+          />
+          <NavButton
+            label="Want to Help"
+            icon={<Heart className="w-5 h-5 text-emerald-600" />}
+            onClick={() => navigate('/want-to-help')}
+            className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+          />
+          <NavButton
+            label="Chat with Lala"
+            icon={<MessageCircle className="w-5 h-5 text-violet-600" />}
+            onClick={openChat}
+            className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+          />
+          <NavButton
+            label="Donate"
+            icon={<HeartHandshake className="w-5 h-5 text-red-500" />}
+            href="https://www.zeffy.com/fundraising/donate-to-provide-los-angeles-with-real-time-verified-resources-in-times-of-crisis"
+            className="text-black hover:bg-gray-100 focus-visible:ring-gray-400"
+          />
         </div>
       </nav>
     </div>
