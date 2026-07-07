@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import MapComponent from '../components/MapComponent';
-import NeedHelpDropdown from '../components/NeedHelpDropdown';
+import ResourceDropdown from '../components/ResourceDropdown';
 import { prefetchBackendForNeedHelp } from '@/lib/needHelpCategories';
 
 export default function NeedHelp() {
@@ -36,7 +36,8 @@ export default function NeedHelp() {
           selectedOrgId={selectedOrgId}
           onSelectOrg={setSelectedOrgId}
         />
-        <NeedHelpDropdown
+        <ResourceDropdown
+          variant="needHelp"
           open={dropdownOpen}
           onOpenChange={setDropdownOpen}
           onResults={(r) => { setResources(r); setSelectedOrgId(null); }}

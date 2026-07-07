@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
 import MapComponent from '../components/MapComponent';
-import NeedHelpDropdown from '../components/NeedHelpDropdown';
-import WantToHelpDropdown from '../components/WantToHelpDropdown';
+import ResourceDropdown from '../components/ResourceDropdown';
 import { prefetchBackendForNeedHelp } from '@/lib/needHelpCategories';
 
 export default function Home() {
+  const navigate = useNavigate();
   const [resources, setResources] = useState([]);
   const [selectedOrgId, setSelectedOrgId] = useState(null);
   const [activeDropdown, setActiveDropdown] = useState(null); // 'needHelp' | 'wantToHelp' | null
@@ -26,7 +27,7 @@ export default function Home() {
         title="HelpNow Inc"
         onNeedHelp={() => setActiveDropdown('needHelp')}
         onWantToHelp={() => setActiveDropdown('wantToHelp')}
-        onLogoClick={closeAll}
+        onLogoClick={() => navigate('/')}
         activeDropdown={activeDropdown}
       />
       <div className="relative flex-1">
@@ -49,15 +50,18 @@ export default function Home() {
           selectedOrgId={selectedOrgId}
           onSelectOrg={setSelectedOrgId}
         />
-        {activeDropdown === 'needHelp' && (
-          <NeedHelpDropdown
-            onResults={(r) => { setResources(r); setSelectedOrgId(null); }}
-            onSelectOrg={setSelectedOrgId}
-            selectedOrgId={selectedOrgId}
-          />
-        )}
+        {/* needHelp is always mounted so the mobile trigger is visible; open only when active */}
+        <ResourceDropdown
+          variant="needHelp"
+          open={activeDropdown === 'needHelp'}
+          onOpenChange={(o) => setActiveDropdown(o ? 'needHelp' : null)}
+          onResults={(r) => { setResources(r); setSelectedOrgId(null); }}
+          onSelectOrg={setSelectedOrgId}
+          selectedOrgId={selectedOrgId}
+        />
         {activeDropdown === 'wantToHelp' && (
-          <WantToHelpDropdown
+          <ResourceDropdown
+            variant="wantToHelp"
             onResults={(r) => { setResources(r); setSelectedOrgId(null); }}
             onSelectOrg={setSelectedOrgId}
             selectedOrgId={selectedOrgId}
