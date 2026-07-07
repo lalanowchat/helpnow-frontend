@@ -7,7 +7,7 @@ import { prefetchBackendForNeedHelp } from '@/lib/needHelpCategories';
 export default function NeedHelp() {
   const [resources, setResources] = useState([]);
   const [selectedOrgId, setSelectedOrgId] = useState(null);
-  const [dropdownOpen, setDropdownOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     prefetchBackendForNeedHelp();
