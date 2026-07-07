@@ -7,6 +7,7 @@ import {
 } from '@/lib/needHelpCategories';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { phoneTelHref, websiteHref } from '@/lib/needHelpContact';
 
@@ -82,10 +83,7 @@ function PanelContent({
   return (
     <>
       {/* Search bar */}
-      <form
-        onSubmit={handleSearch}
-        className="flex items-center gap-2 px-3 sm:pt-3 pb-3 border-b shrink-0"
-      >
+      <div className="flex items-center gap-2 px-3 pt-3 pb-3 border-b shrink-0">
         <div className="flex-1 min-w-0">
           {loadingCategories ? (
             <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -93,40 +91,43 @@ function PanelContent({
               Loading…
             </div>
           ) : (
-            <select
-              value={chosenCategory}
-              onChange={(e) => setChosenCategory(e.target.value)}
-              className="w-full text-sm font-medium text-gray-800 bg-transparent focus:outline-none cursor-pointer"
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+            <Select value={chosenCategory} onValueChange={setChosenCategory}>
+              <SelectTrigger className="w-full border-none shadow-none text-sm font-medium text-gray-800 focus:ring-0 focus:outline-none ring-0 outline-none px-0 h-auto py-0">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent className="z-[3000]">
+                {categories.map((cat) => (
+                  <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
         </div>
 
-        <div className="w-px h-5 bg-gray-200 shrink-0" />
 
-        <div className={cn('flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-1 transition-colors duration-150 shrink-0', v.focusBorder)}>
-          <input
-            type="text"
-            inputMode="numeric"
-            maxLength={5}
-            value={zipCode}
-            onChange={(e) => setZipCode(e.target.value.replace(/\D/g, ''))}
-            placeholder="ZIP"
-            className="w-14 text-sm text-center text-gray-800 bg-transparent px-1 py-1 focus:outline-none placeholder-gray-400"
-          />
-          <button
-            type="submit"
-            disabled={loading || !chosenCategory}
-            className={cn('flex items-center justify-center w-8 h-8 text-white disabled:opacity-50 transition-colors shrink-0', v.searchBtn)}
-          >
-            {loading
-              ? <Loader2 className="w-4 h-4 animate-spin" />
-              : <Search className="w-4 h-4" />}
-          </button>
-        </div>
+        <div className="w-px h-5 bg-gray-200 shrink-0" />
+        <form onSubmit={handleSearch} className="flex items-center shrink-0">
+          <div className={cn('flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-1 transition-colors duration-150', v.focusBorder)}>
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={5}
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value.replace(/\D/g, ''))}
+              placeholder="ZIP"
+              className="w-14 text-sm text-center text-gray-800 bg-transparent px-1 py-1 focus:outline-none placeholder-gray-400"
+            />
+            <button
+              type="submit"
+              disabled={loading || !chosenCategory}
+              className={cn('flex items-center justify-center w-8 h-8 text-white disabled:opacity-50 transition-colors shrink-0', v.searchBtn)}
+            >
+              {loading
+                ? <Loader2 className="w-4 h-4 animate-spin" />
+                : <Search className="w-4 h-4" />}
+            </button>
+          </div>
+        </form>
 
         {/* Minimize toggle — desktop only */}
         {isDesktop && (
@@ -138,7 +139,7 @@ function PanelContent({
             {minimized ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
           </button>
         )}
-      </form>
+      </div>
 
       {/* Results count */}
       {(!isDesktop || !minimized) && (
@@ -358,7 +359,7 @@ export default function ResourceDropdown({
           side="bottom"
           className="md:hidden flex flex-col rounded-t-2xl p-0 h-[70vh]"
         >
-          <div className="mx-auto mt-2 mb-1 w-10 h-1 rounded-full bg-gray-300 shrink-0" />
+          {/* <div className="" /> */}
           <PanelContent {...sharedProps} onSelectOrg={handleSelectOrgMobile} isDesktop={false} />
         </SheetContent>
       </Sheet>
