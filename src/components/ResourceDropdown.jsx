@@ -240,6 +240,14 @@ export default function ResourceDropdown({
     else setMinimizedInternal((m) => !m);
   };
 
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   const resourcesRef = useRef(resources);
   resourcesRef.current = resources;
   const cardRefs = useRef({});
@@ -334,8 +342,8 @@ export default function ResourceDropdown({
         <PanelContent {...sharedProps} onSelectOrg={onSelectOrg} isDesktop minimized={minimized} toggleMinimized={toggleMinimized} />
       </div>
 
-      {/* Mobile: bottom sheet */}
-      <Sheet open={!minimized} onOpenChange={(o) => { if (!o) toggleMinimized(); }}>
+      {/* Mobile: bottom sheet — only mounted on mobile to prevent overlay on desktop */}
+      <Sheet open={isMobile && !minimized} onOpenChange={(o) => { if (!o) toggleMinimized(); }}>
         {/* Floating trigger — always visible when sheet is closed */}
         {minimized && (
           <button
