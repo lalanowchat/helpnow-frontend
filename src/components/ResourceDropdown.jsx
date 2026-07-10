@@ -61,7 +61,14 @@ function ResourceCard({ resource, isSelected, cardRing, linkColor, labels, onSel
     >
       <CardHeader className="pb-2">
         <CardTitle className="text-sm leading-snug">{resource.Org_Name}</CardTitle>
-        <CardDescription className="text-xs">{resource.Org_FullAddress}</CardDescription>
+        <CardDescription className="text-xs space-y-1">
+          <span className="block">{resource.Org_FullAddress}</span>
+          {resource.distance != null && (
+            <span className="block text-gray-500">
+              {labels.distance}: {resource.distance.toFixed(1)} {labels.miles}
+            </span>
+          )}
+        </CardDescription>
       </CardHeader>
       <CardContent className="text-xs space-y-2 pt-0">
         {phone && tel && (
@@ -252,6 +259,8 @@ export default function ResourceDropdown({
       hours: t('needhelp.hours'),
       providing: t('needhelp.providing'),
       providingUnknown: t('needhelp.providing_unknown'),
+      distance: t('needhelp.distance'),
+      miles: t('needhelp.miles'),
     }),
     [t, i18n.language]
   );
