@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import MapComponent from '../components/MapComponent';
 import ResourceDropdown from '../components/ResourceDropdown';
@@ -7,6 +8,24 @@ import { prefetchBackendForNeedHelp } from '@/lib/needHelpCategories';
 export default function WantToHelp() {
   const [resources, setResources] = useState([]);
   const [selectedOrgId, setSelectedOrgId] = useState(null);
+  const { t, i18n } = useTranslation();
+
+  const mapLabels = useMemo(
+    () => ({
+      phone: t('needhelp.phone'),
+      website: t('needhelp.website'),
+      hours: t('needhelp.hours'),
+      providing: t('needhelp.providing'),
+      miles: t('needhelp.miles'),
+      distance: t('needhelp.distance'),
+      callPhone: t('needhelp.call_phone'),
+      visitWebsite: t('needhelp.visit_website'),
+      providingUnknown: t('needhelp.providing_unknown'),
+      unknownName: t('needhelp.unknown_name'),
+      unknownAddress: t('needhelp.unknown_address'),
+    }),
+    [t, i18n.language]
+  );
 
   useEffect(() => {
     prefetchBackendForNeedHelp();
@@ -18,19 +37,7 @@ export default function WantToHelp() {
       <div className="relative flex-1">
         <MapComponent
           resources={resources}
-          mapLabels={{
-            phone: 'Phone',
-            website: 'Website',
-            hours: 'Hours',
-            providing: 'Providing',
-            miles: 'miles',
-            distance: 'Distance',
-            callPhone: 'Call',
-            visitWebsite: 'Visit Website',
-            providingUnknown: 'Unknown',
-            unknownName: 'Unknown',
-            unknownAddress: 'Unknown address',
-          }}
+          mapLabels={mapLabels}
           showDistance={true}
           selectedOrgId={selectedOrgId}
           onSelectOrg={setSelectedOrgId}

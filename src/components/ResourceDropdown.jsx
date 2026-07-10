@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Loader2, Search, ChevronDown, ChevronUp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import axiosInstance from '@/api/axios';
 import {
   readCachedNeedHelpCategories,
@@ -9,7 +10,15 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { phoneTelHref, websiteHref } from '@/lib/needHelpContact';
+import {
+  phoneTelHref,
+  websiteHref,
+  normalizeProvidingItems,
+  resolveProvidingItems,
+  translateProvidingItems,
+  translateOrgHours,
+} from '@/lib/needHelpContact';
+import ProvidingItemsList from '@/components/ProvidingItemsList';
 
 const DEFAULT_ZIP = '86001';
 const PAGE_STEP = 10;
@@ -33,12 +42,14 @@ const VARIANTS = {
   },
 };
 
-function ResourceCard({ resource, isSelected, cardRing, linkColor, onSelect }) {
+function ResourceCard({ resource, isSelected, cardRing, linkColor, labels, onSelect }) {
   const id = resource.Org_Id ?? resource.Org_Name;
   const phone = resource.Org_PhoneNumber?.trim();
   const website = resource.Org_URL?.trim();
   const tel = phone ? phoneTelHref(phone) : null;
   const href = website ? websiteHref(website) : null;
+  const items = resolveProvidingItems(resource);
+  const orgHours = (resource.displayHours ?? resource.Org_Hours)?.trim();
 
   return (
     <Card
@@ -52,7 +63,7 @@ function ResourceCard({ resource, isSelected, cardRing, linkColor, onSelect }) {
         <CardTitle className="text-sm leading-snug">{resource.Org_Name}</CardTitle>
         <CardDescription className="text-xs">{resource.Org_FullAddress}</CardDescription>
       </CardHeader>
-      <CardContent className="text-xs space-y-1 pt-0">
+      <CardContent className="text-xs space-y-2 pt-0">
         {phone && tel && (
           <a href={tel} className={cn('block hover:underline w-fit', linkColor)} onClick={(e) => e.stopPropagation()}>
             {phone}
@@ -63,8 +74,15 @@ function ResourceCard({ resource, isSelected, cardRing, linkColor, onSelect }) {
             {website}
           </a>
         )}
-        {resource.Org_Hours?.trim() && (
-          <p className="text-gray-500">{resource.Org_Hours.trim()}</p>
+        <div>
+          <p className="font-medium text-gray-800 mb-1">{labels.providing}</p>
+          <ProvidingItemsList items={items} labels={labels} className="text-xs" />
+        </div>
+        {orgHours && (
+          <p className="text-gray-500">
+            <span className="font-medium">{labels.hours}: </span>
+            {orgHours}
+          </p>
         )}
       </CardContent>
     </Card>
@@ -77,6 +95,7 @@ function PanelContent({
   zipCode, setZipCode, loading, loadingMore, resources, reachedEnd,
   pageSize, selectedOrgId, cardRefs, onSelectOrg,
   handleSearch, handleLoadMore,
+  labels,
   // desktop-only props
   minimized, toggleMinimized, isDesktop,
 }) {
@@ -172,6 +191,7 @@ function PanelContent({
                       isSelected={selectedOrgId === id}
                       cardRing={v.cardRing}
                       linkColor={v.linkColor}
+                      labels={labels}
                       onSelect={onSelectOrg}
                     />
                   </div>
@@ -223,6 +243,18 @@ export default function ResourceDropdown({
   onOpenChange,
 }) {
   const v = VARIANTS[variant] ?? VARIANTS.needHelp;
+  const { t, i18n } = useTranslation();
+
+  const labels = useMemo(
+    () => ({
+      phone: t('needhelp.phone'),
+      website: t('needhelp.website'),
+      hours: t('needhelp.hours'),
+      providing: t('needhelp.providing'),
+      providingUnknown: t('needhelp.providing_unknown'),
+    }),
+    [t, i18n.language]
+  );
 
   const [categories, setCategories] = useState(readCachedNeedHelpCategories() ?? []);
   const [loadingCategories, setLoadingCategories] = useState(!categories.length);
@@ -234,6 +266,7 @@ export default function ResourceDropdown({
   const [reachedEnd, setReachedEnd] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [minimizedInternal, setMinimizedInternal] = useState(false);
+  const [displayResources, setDisplayResources] = useState([]);
 
   const minimized = open !== undefined ? !open : minimizedInternal;
   const toggleMinimized = () => {
@@ -251,6 +284,39 @@ export default function ResourceDropdown({
 
   const resourcesRef = useRef(resources);
   resourcesRef.current = resources;
+
+  // Translate providing_items for cards (and map via onResults callback).
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const enriched = await Promise.all(
+        resources.map(async (resource) => {
+          const items = normalizeProvidingItems(resource);
+          const displayProvidingItems = await translateProvidingItems(
+            items,
+            i18n.language
+          );
+          const displayHours = await translateOrgHours(
+            resource.Org_Hours,
+            i18n.language
+          );
+          return {
+            ...resource,
+            displayProvidingItems,
+            displayHours,
+          };
+        })
+      );
+      if (!cancelled) {
+        setDisplayResources(enriched);
+        onResults?.(enriched);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [resources, i18n.language]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const cardRefs = useRef({});
 
   useEffect(() => {
@@ -285,7 +351,6 @@ export default function ResourceDropdown({
       const newResources = response.data.resources ?? [];
       setResources(newResources);
       setPageSize(size);
-      onResults?.(newResources);
       if (isLoadMore) {
         setReachedEnd(newResources.length <= prevLen || newResources.length < size);
       } else {
@@ -323,9 +388,9 @@ export default function ResourceDropdown({
 
   const sharedProps = {
     v, categories, loadingCategories, chosenCategory, setChosenCategory,
-    zipCode, setZipCode, loading, loadingMore, resources, reachedEnd,
+    zipCode, setZipCode, loading, loadingMore, resources: displayResources, reachedEnd,
     pageSize, selectedOrgId, cardRefs,
-    handleSearch, handleLoadMore,
+    handleSearch, handleLoadMore, labels,
   };
 
   const handleSelectOrgMobile = (id) => {

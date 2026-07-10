@@ -1,24 +1,79 @@
-/** Shared phone/website helpers for Need Help cards and map popups. */
+/** Shared phone/website helpers and structured providing display for Need Help. */
 
-/** Comma-separated subcategories; translated per segment when locale is not English. */
-export function formatProviding(providing, translatedBySubcategory, language) {
-  if (!providing?.trim()) return "";
-  const trimmed = providing.trim();
-  if (language.startsWith("en")) return trimmed;
-  return trimmed
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((sub) => translatedBySubcategory[sub] ?? sub)
-    .join(", ");
+import { translateText } from "@/translateText";
+
+/** Readable label for one providing item (catalog ``label`` or subcategory). */
+export function providingItemLabel(item) {
+  return (
+    item?.displayLabel ??
+    item?.label ??
+    item?.displaySubcategory ??
+    item?.subcategory ??
+    ""
+  );
+}
+
+/** Resolve structured providing lines; empty arrays fall through to fallbacks. */
+export function resolveProvidingItems(resource) {
+  const fromDisplay = resource?.displayProvidingItems;
+  if (fromDisplay?.length) return fromDisplay;
+  const fromApi = resource?.providing_items;
+  if (fromApi?.length) return fromApi;
+  return normalizeProvidingItems(resource);
+}
+
+/** Fallback when API returns legacy ``providing`` string only. */
+export function normalizeProvidingItems(resource) {
+  if (resource?.providing_items?.length) {
+    return resource.providing_items;
+  }
+  if (resource?.providing?.trim()) {
+    return resource.providing
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((label) => ({
+        subcategory: label,
+        label,
+        summary: null,
+        hours: null,
+      }));
+  }
+  return [];
+}
+
+/** DeepL target code from i18n language tag (e.g. es-MX → ES). */
+function deeplTarget(language) {
+  return (language || "en").split("-")[0].toUpperCase();
+}
+
+/**
+ * Translate providing labels for non-English locales.
+ * Summaries are not shown in evacuee UI; hours live in ``Org_Hours``.
+ */
+export async function translateProvidingItems(items, language) {
+  if (!items?.length) return [];
+  if ((language || "en").startsWith("en")) {
+    return items.map((it) => ({
+      ...it,
+      displayLabel: providingItemLabel(it),
+    }));
+  }
+  const target = deeplTarget(language);
+  const out = [];
+  for (const it of items) {
+    const raw = providingItemLabel(it);
+    const displayLabel = raw ? await translateText(raw, target) : raw;
+    out.push({ ...it, displayLabel });
+  }
+  return out;
 }
 
 /** Org hours string from the API; translated when locale is not English. */
-export function formatHours(hours, translatedByHours, language) {
-  if (!hours?.trim()) return "";
-  const trimmed = hours.trim();
-  if (language.startsWith("en")) return trimmed;
-  return translatedByHours[trimmed] ?? trimmed;
+export async function translateOrgHours(hours, language) {
+  if (!hours?.trim()) return hours;
+  if ((language || "en").startsWith("en")) return hours.trim();
+  return translateText(hours.trim(), deeplTarget(language));
 }
 
 export function websiteHref(url) {
@@ -42,13 +97,26 @@ export function escapeHtml(value) {
 const MAP_BTN_STYLE =
   "display:inline-block;margin:4px 6px 0 0;padding:6px 10px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#111;font-size:13px;text-decoration:none;";
 
-/** Leaflet popup HTML — mirrors ResourceCard fields (labels from i18n). */
+function providingItemLines(items, labels) {
+  if (!items?.length) {
+    return labels.providingUnknown
+      ? [`<i>${escapeHtml(labels.providingUnknown)}</i>`]
+      : [];
+  }
+  return items.map((it) => escapeHtml(providingItemLabel(it) || labels.providingUnknown || ""));
+}
+
+/**
+ * Leaflet popup — org name, address, distance, contact actions, providing list, hours.
+ * Providing shows catalog labels only (no import metadata or per-item hours).
+ */
 export function buildMapPopupHtml(resource, labels, showDistance) {
   const phone = resource.Org_PhoneNumber?.trim();
   const website = resource.Org_URL?.trim();
   const hours = (resource.displayHours ?? resource.Org_Hours)?.trim();
   const tel = phone ? phoneTelHref(phone) : null;
   const href = website ? websiteHref(website) : null;
+  const items = resolveProvidingItems(resource);
 
   const parts = [
     `<strong>${escapeHtml(resource.Org_Name || labels.unknownName)}</strong>`,
@@ -76,13 +144,15 @@ export function buildMapPopupHtml(resource, labels, showDistance) {
     parts.push(actions.join(""));
   }
 
+  const itemLines = providingItemLines(items, labels);
+  if (itemLines.length) {
+    parts.push(`<b>${escapeHtml(labels.providing)}:</b>`);
+    parts.push(...itemLines);
+  }
+
   if (hours) {
     parts.push(`<b>${escapeHtml(labels.hours)}:</b> ${escapeHtml(hours)}`);
   }
-
-  const providingText =
-    resource.displayProviding ?? resource.providing ?? labels.providingUnknown;
-  parts.push(`<b>${escapeHtml(labels.providing)}:</b> ${escapeHtml(providingText)}`);
 
   return parts.filter(Boolean).join("<br>");
 }
